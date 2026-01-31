@@ -5,6 +5,7 @@ import LoginPage from "./pages/client/login";
 import RegisterPage from "./pages/client/register";
 import AdminLayout from "./layouts/AdminLayout";
 import DashboardPage from "./pages/admin/dashboard";
+import AdminLoginPage from "./pages/admin/login";
 
 
 const router = createBrowserRouter([
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
     path: "/admin",
     Component: AdminLayout,
     children: [
-      { index: true, Component: DashboardPage }
+      { index: true, Component: DashboardPage },
+      { path: "/login", Component: AdminLoginPage }
     ]
   }
 ])
