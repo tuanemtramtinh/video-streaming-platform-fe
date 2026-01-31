@@ -1,16 +1,16 @@
 #!/bin/sh
 
-# Lấy nội dung message từ tham số thứ nhất
 COMMIT_MSG_FILE=$1
 commit_msg=$(cat "$COMMIT_MSG_FILE")
-
-# Regex cho Jira Key
 JIRA_REGEX="[A-Z0-9]+-[0-9]+"
 
 if ! echo "$commit_msg" | grep -qE "$JIRA_REGEX"; then
-  echo "[ERROR] Wrong commit message format!"
+  # Dùng nhiều lệnh echo thay vì dùng \n sẽ an toàn cho mọi hệ điều hành
+  echo ""
+  echo "❌ [ERROR] Wrong commit message format!"
   echo "-------------------------------------------------------"
-  echo "Yeu cau co Jira Key. Vi du: 'SCRUM-01: fix bug login'"
-  echo "-------------------------------------------------------\n"
+  echo "Jira Key required. Example: 'QLDAPM-01: fix bug login'"
+  echo "-------------------------------------------------------"
+  echo ""
   exit 1
 fi
