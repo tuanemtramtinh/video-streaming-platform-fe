@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Lấy nội dung message từ tham số thứ nhất
+COMMIT_MSG_FILE=$1
+commit_msg=$(cat "$COMMIT_MSG_FILE")
+
+# Regex cho Jira Key
+JIRA_REGEX="[A-Z0-9]+-[0-9]+"
+
+if ! echo "$commit_msg" | grep -qE "$JIRA_REGEX"; then
+  echo "[ERROR] Wrong commit message format!"
+  echo "-------------------------------------------------------"
+  echo "Yeu cau co Jira Key. Vi du: 'SCRUM-01: fix bug login'"
+  echo "-------------------------------------------------------\n"
+  exit 1
+fi
