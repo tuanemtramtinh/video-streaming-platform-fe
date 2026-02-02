@@ -7,7 +7,6 @@ import AdminLayout from "./layouts/AdminLayout";
 import DashboardPage from "./pages/admin/dashboard";
 import AdminLoginPage from "./pages/admin/login";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,17 +14,17 @@ const router = createBrowserRouter([
     children: [
       { index: true, Component: HomePage },
       { path: "/login", Component: LoginPage },
-      { path: "/register", Component: RegisterPage }
-    ]
+      { path: "/register", Component: RegisterPage },
+    ],
   },
   {
     path: "/admin",
     Component: AdminLayout,
     children: [
       { index: true, Component: DashboardPage },
-      { path: "/login", Component: AdminLoginPage }
-    ]
-  }
-])
+      { path: "login", Component: AdminLoginPage },
+    ],
+  },
+]);
 
-export default router
+export default router;
