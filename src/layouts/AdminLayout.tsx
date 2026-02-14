@@ -1,4 +1,4 @@
-import { Menu, PanelLeftOpen, PanelRightOpen } from "lucide-react";
+import { PanelLeftOpen, PanelRightOpen } from "lucide-react";
 import { useState } from "react";
 import { Outlet } from "react-router";
 
@@ -25,7 +25,7 @@ export default function AdminLayout() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="bg-admin-sidebar is-drawer-close:w-[5vw] is-drawer-open:w-[15vw] flex min-h-full flex-col items-start p-4 text-white">
+        <div className="bg-color-primary is-drawer-close:w-[5vw] is-drawer-open:w-[15vw] flex min-h-full flex-col items-start p-4 text-white">
           <div className="is-drawer-open:justify-end is-drawer-close:justify-center flex w-full">
             <label
               htmlFor="my-drawer"

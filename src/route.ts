@@ -6,6 +6,7 @@ import RegisterPage from "./pages/client/register";
 import AdminLayout from "./layouts/AdminLayout";
 import DashboardPage from "./pages/admin/dashboard";
 import AdminLoginPage from "./pages/admin/login";
+import CoursePage from "./pages/client/courses";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "/login", Component: LoginPage },
       { path: "/register", Component: RegisterPage },
+      { path: "/courses", Component: CoursePage },
     ],
   },
   {

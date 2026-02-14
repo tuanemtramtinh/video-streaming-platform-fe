@@ -1,14 +1,18 @@
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-
-import { Outlet } from "react-router"
+import { Outlet } from "react-router";
+import { ClientHeader } from "../components/ClientHeader";
+import { ClientFooter } from "../components/ClientFooter";
 
 function AppLayout() {
   return (
-    <div>
-      <Outlet />
-    </div>
-  )
+    <div className="flex min-h-screen flex-col">
+      <ClientHeader />
 
+      <div className="container mx-auto flex-1">
+        <Outlet />
+      </div>
+
+      <ClientFooter />
+    </div>
+  );
 }
-export default AppLayout
+export default AppLayout;
