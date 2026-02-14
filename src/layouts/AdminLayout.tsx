@@ -1,6 +1,6 @@
-import { PanelLeftOpen, PanelRightOpen } from "lucide-react";
+import { Gauge, PanelLeftOpen, PanelRightOpen, Settings } from "lucide-react";
 import { useState } from "react";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -38,10 +38,22 @@ export default function AdminLayout() {
           <ul className="menu w-full">
             {/* Sidebar content here */}
             <li>
-              <a className="">Sidebar Item 1</a>
+              <Link
+                to={""}
+                className="is-drawer-close:px-0 is-drawer-close:justify-center flex w-full items-center py-4"
+              >
+                <Gauge className="" />
+                <span className="is-drawer-close:hidden">Dashboard</span>
+              </Link>
             </li>
             <li>
-              <a className="">Sidebar Item 2</a>
+              <Link
+                to={""}
+                className="is-drawer-close:p-0 is-drawer-close:justify-center flex w-full items-center py-4"
+              >
+                <Settings className="" />
+                <span className="is-drawer-close:hidden">Settings</span>
+              </Link>
             </li>
           </ul>
         </div>
