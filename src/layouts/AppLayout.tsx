@@ -7,7 +7,7 @@ function AppLayout() {
     <div className="flex min-h-screen flex-col">
       <ClientHeader />
 
-      <div className="container mx-auto flex-1">
+      <div className="flex-1">
         <Outlet />
       </div>
 

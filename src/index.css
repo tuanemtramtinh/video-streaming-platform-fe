@@ -13,7 +13,8 @@
   --color-text-secondary: #334155;
   --color-text-thirdary: #CBD5E1;
   --color-text-fourthdary: #2563EB;
-  --color-border: #E2E8F0
+  --color-border: #E2E8F0;
+  --color-background: #F8FAFC;
 }
 
 body {

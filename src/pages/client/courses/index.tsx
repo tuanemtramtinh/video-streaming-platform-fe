@@ -4,7 +4,7 @@ import { CourseRightColumn } from "../../../components/CourseRightColumn";
 
 export default function CoursePage() {
   return (
-    <div className="py-[60px]">
+    <div className="container mx-auto py-[60px]">
       <div className="mb-6">
         <div className="text-color-primary mb-6 text-[40px] font-bold">
           Khoá học

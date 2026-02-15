@@ -1,3 +1,5 @@
+import { Rating } from "../Rating";
+
 export const CourseLeftColumn = () => {
   return (
     <div>
@@ -7,121 +9,11 @@ export const CourseLeftColumn = () => {
           Đánh giá
         </div>
         <div className="collapse-content px-2">
-          <div className="rating">
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="1 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="2 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="3 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="4 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="5 star"
-              aria-current="true"
-            ></div>
-          </div>
-          <div className="rating">
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="1 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="2 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="3 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="4 star"
-              aria-current="true"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="5 star"
-            ></div>
-          </div>
-          <div className="rating">
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="1 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="2 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="3 star"
-              aria-current="true"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="4 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="5 star"
-            ></div>
-          </div>
-          <div className="rating">
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="1 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="2 star"
-              aria-current="true"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="3 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="4 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="5 star"
-            ></div>
-          </div>
-          <div className="rating">
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="1 star"
-              aria-current="true"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="2 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="3 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="4 star"
-            ></div>
-            <div
-              className="mask mask-star bg-orange-400"
-              aria-label="5 star"
-            ></div>
-          </div>
+          <Rating rating={5} />
+          <Rating rating={4} />
+          <Rating rating={3} />
+          <Rating rating={2} />
+          <Rating rating={1} />
         </div>
       </div>
 

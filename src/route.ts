@@ -7,6 +7,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import DashboardPage from "./pages/admin/dashboard";
 import AdminLoginPage from "./pages/admin/login";
 import CoursePage from "./pages/client/courses";
+import CourseDetailPage from "./pages/client/courses/detail";
 
 const router = createBrowserRouter([
   {
@@ -14,9 +15,10 @@ const router = createBrowserRouter([
     Component: AppLayout,
     children: [
       { index: true, Component: HomePage },
-      { path: "/login", Component: LoginPage },
-      { path: "/register", Component: RegisterPage },
-      { path: "/courses", Component: CoursePage },
+      { path: "login", Component: LoginPage },
+      { path: "register", Component: RegisterPage },
+      { path: "courses", Component: CoursePage },
+      { path: "courses/:id", Component: CourseDetailPage },
     ],
   },
   {
