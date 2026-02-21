@@ -1,4 +1,10 @@
-import { Gauge, PanelLeftOpen, PanelRightOpen, Settings } from "lucide-react";
+import {
+  Book,
+  Gauge,
+  PanelLeftOpen,
+  PanelRightOpen,
+  Settings,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, Outlet } from "react-router";
 
@@ -14,7 +20,7 @@ export default function AdminLayout() {
         defaultChecked={isOpen}
         onChange={(e) => setIsOpen(e.target.checked)}
       />
-      <div className="drawer-content">
+      <div className="drawer-content bg-background">
         <div className="p-4">
           <Outlet />
         </div>
@@ -39,20 +45,29 @@ export default function AdminLayout() {
             {/* Sidebar content here */}
             <li>
               <Link
-                to={""}
+                to={"/admin"}
                 className="is-drawer-close:px-0 is-drawer-close:justify-center flex w-full items-center py-4"
               >
                 <Gauge className="" />
-                <span className="is-drawer-close:hidden">Dashboard</span>
+                <span className="is-drawer-close:hidden">Bảng điều khiển</span>
               </Link>
             </li>
             <li>
               <Link
-                to={""}
-                className="is-drawer-close:p-0 is-drawer-close:justify-center flex w-full items-center py-4"
+                to={"/admin/courses"}
+                className="is-drawer-close:px-0 is-drawer-close:justify-center flex w-full items-center py-4"
+              >
+                <Book className="" />
+                <span className="is-drawer-close:hidden">Khoá học</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/admin/settings"}
+                className="is-drawer-close:px-0 is-drawer-close:justify-center flex w-full items-center py-4"
               >
                 <Settings className="" />
-                <span className="is-drawer-close:hidden">Settings</span>
+                <span className="is-drawer-close:hidden">Cài đặt</span>
               </Link>
             </li>
           </ul>

@@ -6,6 +6,8 @@
   themes: light --default;
 }
 
+
+
 @theme {
   --font-sans: "Inter", sans-serif;
   --breakpoint-2xl: 80rem;
@@ -15,6 +17,21 @@
   --color-text-fourthdary: #2563EB;
   --color-border: #E2E8F0;
   --color-background: #F8FAFC;
+}
+
+@layer components {
+  .tw-filepond .filepond--root {
+    @apply min-h-[220px];
+  }
+
+
+  .tw-filepond .filepond--panel-root {
+    @apply  !bg-white border border-dashed border-gray-300 rounded-xl;
+  }
+
+  .tw-filepond .filepond--drop-label {
+    @apply text-gray-700 !min-h-[220px];
+  }
 }
 
 body {

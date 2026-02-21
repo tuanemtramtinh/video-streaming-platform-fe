@@ -8,6 +8,8 @@ import DashboardPage from "./pages/admin/dashboard";
 import AdminLoginPage from "./pages/admin/login";
 import CoursePage from "./pages/client/courses";
 import CourseDetailPage from "./pages/client/courses/detail";
+import AdminCoursePage from "./pages/admin/courses";
+import AdminNewCoursePage from "./pages/admin/courses/new";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, Component: DashboardPage },
       { path: "login", Component: AdminLoginPage },
+      { path: "courses", Component: AdminCoursePage },
+      { path: "courses/new", Component: AdminNewCoursePage },
     ],
   },
 ]);
