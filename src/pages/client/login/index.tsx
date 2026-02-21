@@ -1,9 +1,7 @@
+import { AuthForm } from "@/components/AuthForm";
+
 function LoginPage() {
-  return (
-    <form>
-      <div>Chào mừng trở lại</div>
-    </form>
-  );
+  return <AuthForm />;
 }
 
 export default LoginPage;
