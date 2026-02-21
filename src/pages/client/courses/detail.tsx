@@ -1,5 +1,5 @@
-import { CourseDetailHeaderLeftColumn } from "../../../components/CourseDetailHeaderLeftColumn";
-import { CourseDetailHeaderRightColumn } from "../../../components/CourseDetailHeaderRightColumn";
+import { CourseDetailHeaderLeftColumn } from "@/components/CourseDetailHeaderLeftColumn";
+import { CourseDetailHeaderRightColumn } from "@/components/CourseDetailHeaderRightColumn";
 
 export default function CourseDetailPage() {
   return (

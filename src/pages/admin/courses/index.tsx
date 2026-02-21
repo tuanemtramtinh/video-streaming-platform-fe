@@ -11,7 +11,10 @@ const CardItem = ({ title, desc }: { title: string; desc: string }) => {
 
 const Card = () => {
   return (
-    <div className="card border-border border shadow-sm">
+    <Link
+      to={"/admin/courses/details/1"}
+      className="card border-border border shadow-sm"
+    >
       <div className="card-body">
         <div className="card-title border-border border-b pb-2">
           Khoá học DSA
@@ -25,7 +28,7 @@ const Card = () => {
           <CardItem title="500" desc="Yêu thích" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

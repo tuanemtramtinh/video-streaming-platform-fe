@@ -10,6 +10,10 @@ import CoursePage from "./pages/client/courses";
 import CourseDetailPage from "./pages/client/courses/detail";
 import AdminCoursePage from "./pages/admin/courses";
 import AdminNewCoursePage from "./pages/admin/courses/new";
+import AdminEditCoursePage from "@/pages/admin/courses/details";
+import TestPage from "@/pages/admin/courses/details/test";
+import AdminCourseDetailsLayout from "@/layouts/AdminCourseDetailsLayout";
+import AdminCourseSectionPage from "@/pages/admin/courses/details/sections";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +35,24 @@ const router = createBrowserRouter([
       { path: "login", Component: AdminLoginPage },
       { path: "courses", Component: AdminCoursePage },
       { path: "courses/new", Component: AdminNewCoursePage },
+      {
+        path: "courses/details",
+        Component: AdminCourseDetailsLayout,
+        children: [
+          {
+            path: ":id",
+            Component: AdminEditCoursePage,
+          },
+          {
+            path: ":id/sections",
+            Component: AdminCourseSectionPage,
+          },
+          {
+            path: ":id/test",
+            Component: TestPage,
+          },
+        ],
+      },
     ],
   },
 ]);

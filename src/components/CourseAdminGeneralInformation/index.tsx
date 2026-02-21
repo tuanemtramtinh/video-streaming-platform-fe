@@ -7,17 +7,9 @@ import { Editor } from "@tinymce/tinymce-react";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-const GeneralInformation = () => {
+export const CourseAdminGeneralInformation = () => {
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
-        <div className="text-color-primary text-lg font-semibold">
-          Thông tin chung
-        </div>
-        <button className="btn bg-text-fourthdary rounded-lg text-white">
-          Tạo khoá học mới
-        </button>
-      </div>
       <div className="flex gap-6">
         <div className="flex-3">
           <input
@@ -48,7 +40,7 @@ const GeneralInformation = () => {
                   Upload Thumbnail in JPEG, PNG.
                 </div>
               </div>
-            `}
+              `}
             />
           </div>
 
@@ -81,34 +73,3 @@ const GeneralInformation = () => {
     </div>
   );
 };
-
-export default function AdminNewCoursePage() {
-  return (
-    <div>
-      <h2 className="text-color-primary mb-4 text-2xl font-bold">
-        Tạo khoá học mới
-      </h2>
-      <GeneralInformation />
-      {/* <div role="tablist" className="tabs tabs-border">
-        <input
-          type="radio"
-          name="my_tabs"
-          className="tab"
-          aria-label="Thông tin chung"
-          defaultChecked
-        />
-        <div className="tab-content mt-4">
-          
-        </div>
-
-        <input
-          type="radio"
-          name="my_tabs"
-          className="tab"
-          aria-label="Danh sách chương"
-        />
-        <div className="tab-content mt-4">Danh sách chương</div>
-      </div> */}
-    </div>
-  );
-}
