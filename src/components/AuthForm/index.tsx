@@ -1,22 +1,38 @@
-export const AuthForm = () => {
+export const AuthForm = ({ type }: { type: "login" | "register" }) => {
   return (
     <div className="flex flex-1 items-center justify-center">
-      <form className="card border-border border shadow-sm">
+      <form className="card border-border w-1/4 border shadow-sm">
         <div className="card-body">
           <h2 className="card-title flex justify-center text-2xl font-bold">
-            Chào mừng quay trở lại
+            {type === "login"
+              ? "Chào mừng quay trở lại"
+              : "Đăng ký và bắt đầu học"}
           </h2>
           <p className="mb-6 flex justify-center text-lg">
-            Chào mừng trở lại! Hãy điền thông tin của bạn
+            {type === "login"
+              ? "Chào mừng trở lại! Hãy điền thông tin của bạn"
+              : "Tạo tài khoản miễn phí của bạn"}
           </p>
           <div className="flex flex-col gap-6">
-            <input type="text" className="input w-full" placeholder="Email" />
+            {type === "register" && (
+              <input type="text" className="input w-full" placeholder="Họ" />
+            )}
+            {type === "register" && (
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="Tên và tên đệm"
+              />
+            )}
+            <input type="email" className="input w-full" placeholder="Email" />
             <input
               type="password"
               className="input w-full"
               placeholder="Mật khẩu"
             />
-            <button className="btn btn-neutral btn-lg">Đăng Nhập</button>
+            <button className="btn btn-neutral btn-lg">
+              {type === "login" ? "Đăng Nhập" : "Đăng Ký"}
+            </button>
           </div>
         </div>
       </form>
