@@ -1,7 +1,7 @@
 export const AuthForm = ({ type }: { type: "login" | "register" }) => {
   return (
     <div className="flex flex-1 items-center justify-center">
-      <form className="card border-border w-1/4 border shadow-sm">
+      <form className="card border-border w-1/4 border shadow-lg">
         <div className="card-body">
           <h2 className="card-title flex justify-center text-2xl font-bold">
             {type === "login"

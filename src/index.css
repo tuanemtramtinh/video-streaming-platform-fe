@@ -34,6 +34,14 @@
   }
 }
 
+.slick-prev:before,
+.slick-next:before {
+  color: #2563eb !important;
+  /* đổi sang màu bạn muốn */
+  font-size: 24px !important;
+  /* chỉnh kích thước */
+}
+
 body {
   font-family: var(--font-sans);
 }
