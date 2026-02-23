@@ -8,7 +8,7 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
               ? "Chào mừng quay trở lại"
               : "Đăng ký và bắt đầu học"}
           </h2>
-          <p className="mb-6 flex justify-center text-lg">
+          <p className="mb-6 flex justify-center text-center text-lg">
             {type === "login"
               ? "Chào mừng trở lại! Hãy điền thông tin của bạn"
               : "Tạo tài khoản miễn phí của bạn"}
