@@ -1,14 +1,27 @@
 import { useLogin } from "@/hooks/useLogin";
+import { useRegister } from "@/hooks/useRegister";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export const AuthForm = ({ type }: { type: "login" | "register" }) => {
   const { mutate: login } = useLogin();
+  const { mutate: register } = useRegister();
+  const navigate = useNavigate();
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
     login({ email, password });
+  };
+
+  const handleRegister = () => {
+    register({ firstName, lastName, email, password });
+    setEmail("");
+    setPassword("");
+    navigate("/login");
   };
 
   return (
@@ -27,13 +40,21 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
           </p>
           <div className="flex flex-col gap-6">
             {type === "register" && (
-              <input type="text" className="input w-full" placeholder="Họ" />
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="Họ"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
             )}
             {type === "register" && (
               <input
                 type="text"
                 className="input w-full"
                 placeholder="Tên và tên đệm"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             )}
             <input
@@ -54,7 +75,8 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
               className="btn btn-neutral btn-lg"
               onClick={(e) => {
                 e.preventDefault();
-                handleLogin();
+                if (type === "login") handleLogin();
+                else handleRegister();
               }}
             >
               {type === "login" ? "Đăng Nhập" : "Đăng Ký"}
