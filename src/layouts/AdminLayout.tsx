@@ -1,6 +1,9 @@
+import { Avatar } from "@/components/Avatar";
+import { useAuthStore } from "@/stores/useAuthStore";
 import {
   Book,
   Gauge,
+  Menu,
   PanelLeftOpen,
   PanelRightOpen,
   Settings,
@@ -10,7 +13,7 @@ import { Link, Outlet } from "react-router";
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-
+  const user = useAuthStore((state) => state.user);
   return (
     <div className="drawer lg:drawer-open">
       <input
@@ -41,7 +44,7 @@ export default function AdminLayout() {
               {isOpen ? <PanelRightOpen /> : <PanelLeftOpen />}
             </label>
           </div>
-          <ul className="menu w-full">
+          <ul className="menu w-full flex-1">
             {/* Sidebar content here */}
             <li>
               <Link
@@ -71,6 +74,20 @@ export default function AdminLayout() {
               </Link>
             </li>
           </ul>
+          <div className="is-drawer-close:justify-center flex w-full items-center justify-between">
+            <div className="is-drawer-close:justify-center flex items-center gap-2">
+              <Avatar
+                width="w-10"
+                url={`https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}`}
+              />
+              <span className="text-background is-drawer-close:hidden font-medium">
+                Chào, {user?.firstName}
+              </span>
+            </div>
+            <button className="btn btn-ghost btn-sm is-drawer-close:hidden">
+              <Menu />
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,16 @@
+import { useLogin } from "@/hooks/useLogin";
+import { useState } from "react";
+
 export const AuthForm = ({ type }: { type: "login" | "register" }) => {
+  const { mutate: login } = useLogin();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    login({ email, password });
+  };
+
   return (
     <div className="flex flex-1 items-center justify-center">
       <form className="card border-border w-1/4 border shadow-lg">
@@ -24,13 +36,27 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
                 placeholder="Tên và tên đệm"
               />
             )}
-            <input type="email" className="input w-full" placeholder="Email" />
+            <input
+              type="email"
+              className="input w-full"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <input
               type="password"
               className="input w-full"
               placeholder="Mật khẩu"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button className="btn btn-neutral btn-lg">
+            <button
+              className="btn btn-neutral btn-lg"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogin();
+              }}
+            >
               {type === "login" ? "Đăng Nhập" : "Đăng Ký"}
             </button>
           </div>
