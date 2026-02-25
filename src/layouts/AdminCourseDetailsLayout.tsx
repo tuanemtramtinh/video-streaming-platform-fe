@@ -14,7 +14,7 @@ export default function AdminCourseDetailsLayout() {
           role="tab"
           className={({ isActive }) => `tab ${isActive ? "tab-active" : ""}`}
         >
-          Thông tin chung
+          Chi tiết
         </NavLink>
 
         <NavLink
@@ -22,15 +22,7 @@ export default function AdminCourseDetailsLayout() {
           role="tab"
           className={({ isActive }) => `tab ${isActive ? "tab-active" : ""}`}
         >
-          Chương học
-        </NavLink>
-
-        <NavLink
-          to={id ? `${id}/test` : ""}
-          role="tab"
-          className={({ isActive }) => `tab ${isActive ? "tab-active" : ""}`}
-        >
-          Test
+          Danh sách chương
         </NavLink>
       </div>
 

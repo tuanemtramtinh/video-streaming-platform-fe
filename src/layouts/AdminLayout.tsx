@@ -24,7 +24,7 @@ export default function AdminLayout() {
         onChange={(e) => setIsOpen(e.target.checked)}
       />
       <div className="drawer-content bg-background">
-        <div className="p-4">
+        <div className="h-full p-4">
           <Outlet />
         </div>
       </div>

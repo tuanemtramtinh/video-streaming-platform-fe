@@ -3,7 +3,7 @@ import { CourseAdminGeneralInformation } from "@/components/CourseAdminGeneralIn
 export default function AdminEditCoursePage() {
   return (
     <div>
-      <CourseAdminGeneralInformation />
+      <CourseAdminGeneralInformation isEdit={true} />
     </div>
   );
 }
