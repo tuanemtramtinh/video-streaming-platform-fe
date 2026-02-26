@@ -5,6 +5,11 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { AdminCustomInput } from "@/components/AdminCustomInput";
+import { useEffect, useState } from "react";
+import Loading from "@/components/Loading";
+import { useCreateCourse } from "@/hooks/useCreateCourse";
+import { useNavigate, useParams } from "react-router";
+import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -13,8 +18,62 @@ export const CourseAdminGeneralInformation = ({
 }: {
   isEdit: boolean;
 }) => {
+  const { id } = useParams<{ id: string }>();
+
+  const navigate = useNavigate();
+
+  const [courseName, setCourseName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [smallDesc, setSmallDesc] = useState<string>("");
+  const [pondFiles, setPondFiles] = useState<any[]>([]);
+  const { data, isSuccess } = useGetCourseDetail(isEdit ? id : undefined);
+
+  const { mutate: createCourse, isPending } = useCreateCourse();
+
+  const handleSubmit = () => {
+    createCourse(
+      {
+        title: courseName,
+        description: desc,
+        thumbnail: thumbnail as File,
+        price: price,
+        discount: discount === "" ? "0" : discount,
+        categoryId: "3",
+      },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          navigate("/admin/courses");
+        },
+      },
+    );
+  };
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      console.log(data.thumbnailUrl);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCourseName(data.title);
+      setDesc(data.description);
+      setPrice(data.price.toString());
+      setDiscount(data.discount.toString());
+      setPondFiles([
+        {
+          source: data.thumbnailUrl,
+          options: {
+            type: "remote",
+          },
+        },
+      ]);
+    }
+  }, [data, isSuccess]);
+
   return (
     <div>
+      {isPending && <Loading />}
       <div className="mb-8 flex items-center justify-between">
         <div className="text-color-primary text-lg font-semibold">Chi tiết</div>
         <div className="flex gap-2">
@@ -22,7 +81,10 @@ export const CourseAdminGeneralInformation = ({
             Nháp
           </button>
           {!isEdit && (
-            <button className="btn btn-success rounded-lg text-white">
+            <button
+              className="btn btn-success rounded-lg text-white"
+              onClick={handleSubmit}
+            >
               Tạo
             </button>
           )}
@@ -51,12 +113,16 @@ export const CourseAdminGeneralInformation = ({
             placeholder="Tên khoá học..."
             required
             style="mb-6"
+            value={courseName}
+            setValue={setCourseName}
           />
           <AdminCustomInput
             label="Mô tả ngắn"
             placeholder="Mô tả ngắn..."
             required
             style="mb-6"
+            value={smallDesc}
+            setValue={setSmallDesc}
           />
           <div className="mb-6">
             <h2 className="text-text-secondary mb-2 text-sm">
@@ -65,6 +131,15 @@ export const CourseAdminGeneralInformation = ({
             <FilePond
               name="thumbnail"
               className="filepond tw-filepond"
+              allowMultiple={false}
+              files={pondFiles}
+              onupdatefiles={(items) => {
+                setPondFiles(items);
+
+                // Nếu user chọn file mới → lấy File
+                const file = (items[0]?.file as File) ?? null;
+                setThumbnail(file);
+              }}
               labelIdle={`
                  <div class="flex flex-col items-center justify-center gap-2 w-full h-full py-8">
                    <svg class="text-gray-800 mb-2" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -91,15 +166,34 @@ export const CourseAdminGeneralInformation = ({
             <h2 className="text-text-secondary mb-2 text-sm">
               Mô tả Khoá học <span className="text-error">*</span>
             </h2>
-            <Editor apiKey={import.meta.env.VITE_TINYMCE_API_KEY} />
+            <Editor
+              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+              value={desc}
+              onEditorChange={(newValue) => setDesc(newValue)}
+              init={{
+                plugins: ["lists", "link", "image", "table", "code"],
+
+                toolbar:
+                  "undo redo | blocks | bold italic | bullist numlist | alignleft aligncenter alignright | indent outdent | code",
+              }}
+            />
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-4">
           <AdminCustomInput
             label="Giá khoá học"
             placeholder="Giá khoá học..."
+            required={true}
+            value={price}
+            setValue={setPrice}
           />
-          <AdminCustomInput label="% Giảm giá" placeholder="% Giảm giá..." />
+          <AdminCustomInput
+            label="% Giảm giá"
+            placeholder="% Giảm giá..."
+            required={true}
+            value={discount}
+            setValue={setDiscount}
+          />
         </div>
       </div>
     </div>

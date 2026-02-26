@@ -3,12 +3,15 @@ export const AdminCustomInput = ({
   placeholder,
   required,
   style,
+  value,
+  setValue,
 }: {
   label: string;
-
   placeholder: string;
   required?: boolean;
   style?: string;
+  value?: string;
+  setValue?: (value: string) => void;
 }) => {
   return (
     <div
@@ -23,6 +26,8 @@ export const AdminCustomInput = ({
         placeholder={placeholder}
         className="input input-ghost w-full p-0 focus-within:outline-none"
         required
+        value={value}
+        onChange={(e) => setValue?.(e.target.value)}
       />
     </div>
   );

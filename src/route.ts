@@ -12,7 +12,8 @@ import AdminCoursePage from "./pages/admin/courses";
 import AdminNewCoursePage from "./pages/admin/courses/new";
 import AdminEditCoursePage from "@/pages/admin/courses/details";
 import AdminCourseDetailsLayout from "@/layouts/AdminCourseDetailsLayout";
-import AdminCourseSectionPage from "@/pages/admin/courses/details/sections";
+import AdminCourseSectionPage from "@/pages/admin/courses/sections";
+import AdminResourcesPage from "@/pages/admin/courses/resources";
 
 const router = createBrowserRouter([
   {
@@ -32,19 +33,20 @@ const router = createBrowserRouter([
     children: [
       { index: true, Component: DashboardPage },
       { path: "login", Component: AdminLoginPage },
-      { path: "courses", Component: AdminCoursePage },
-      { path: "courses/new", Component: AdminNewCoursePage },
       {
-        path: "courses/details",
-        Component: AdminCourseDetailsLayout,
+        path: "courses",
         children: [
+          { index: true, Component: AdminCoursePage },
+          { path: "new", Component: AdminNewCoursePage },
+
           {
             path: ":id",
-            Component: AdminEditCoursePage,
-          },
-          {
-            path: ":id/sections",
-            Component: AdminCourseSectionPage,
+            Component: AdminCourseDetailsLayout,
+            children: [
+              { index: true, Component: AdminEditCoursePage },
+              { path: "sections", Component: AdminCourseSectionPage },
+              { path: "resources", Component: AdminResourcesPage },
+            ],
           },
         ],
       },

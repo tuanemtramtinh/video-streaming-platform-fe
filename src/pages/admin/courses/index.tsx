@@ -1,4 +1,7 @@
+import { useGetCourse } from "@/hooks/useGetCourse";
+import type { ICourseResponse } from "@/types/course.type";
 import { Search } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 const CardItem = ({ title, desc }: { title: string; desc: string }) => {
@@ -10,10 +13,18 @@ const CardItem = ({ title, desc }: { title: string; desc: string }) => {
   );
 };
 
-const Card = () => {
+const Card = ({
+  id,
+  title,
+  price,
+}: {
+  id: number;
+  title: string;
+  price: string;
+}) => {
   return (
     <Link
-      to={"/admin/courses/details/1"}
+      to={`/admin/courses/${id}`}
       className="card border-border border shadow-sm"
     >
       <div className="card-body">
@@ -22,12 +33,12 @@ const Card = () => {
             <div className="badge border-border text-color-primary mb-2 bg-[#F1F5F9] text-xs font-semibold">
               Lập trình
             </div>
-            <div>Khoá học DSA</div>
+            <div>{title}</div>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <CardItem title="$00.00" desc="Giá" />
+          <CardItem title={price} desc="Giá" />
           <CardItem title="13" desc="Số chương" />
           <CardItem title="254" desc="Đã đăng ký" />
           <CardItem title="25" desc="Chứng chỉ" />
@@ -40,6 +51,11 @@ const Card = () => {
 };
 
 export default function AdminCoursePage() {
+  const [page, setPage] = useState(1);
+  const limit = 9;
+
+  const { data, isLoading } = useGetCourse(page, limit);
+
   return (
     <div className="flex h-full flex-col">
       <div className="mb-6 flex items-center justify-between">
@@ -57,15 +73,18 @@ export default function AdminCoursePage() {
       </label>
       <div className="flex flex-1 flex-col gap-6">
         <div className="grid flex-1 grid-cols-3 content-start gap-3">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {data ? (
+            data.data.map((course) => (
+              <Card
+                key={course.id}
+                id={course.id}
+                title={course.title}
+                price={course.price.toLocaleString()}
+              />
+            ))
+          ) : (
+            <div>No Course</div>
+          )}
         </div>
         <div className="join justify-center">
           <button className="join-item btn">1</button>
