@@ -7,7 +7,7 @@ export const CourseDetailHeaderRightColumn = ({
   discount: number;
   thumbnailUrl: string;
 }) => {
-  const discountPrice = price * (discount / 100);
+  const discountPrice = price * ((100 - discount) / 100);
 
   return (
     <div className="card border-border shadow-lg">
