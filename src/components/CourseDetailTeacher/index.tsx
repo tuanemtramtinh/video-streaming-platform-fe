@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/Avatar";
 import { Badge, GraduationCap, Play } from "lucide-react";
 
-export const CourseDetailTeacher = () => {
+export const CourseDetailTeacher = ({ author }: { author: string }) => {
   return (
     <div className="border-border border-b py-6">
       <div className="text-color-primary mb-4 text-xl font-semibold">
@@ -9,9 +9,7 @@ export const CourseDetailTeacher = () => {
       </div>
 
       <div className="mb-4">
-        <h2 className="text-text-fourthdary text-xl font-semibold">
-          Ronald Richards
-        </h2>
+        <h2 className="text-text-fourthdary text-xl font-semibold">{author}</h2>
         <div className="text-text-secondary">Nhà thiết kế UI/UX</div>
       </div>
 

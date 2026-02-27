@@ -14,6 +14,7 @@ import AdminEditCoursePage from "@/pages/admin/courses/details";
 import AdminCourseDetailsLayout from "@/layouts/AdminCourseDetailsLayout";
 import AdminCourseSectionPage from "@/pages/admin/courses/sections";
 import AdminResourcesPage from "@/pages/admin/courses/resources";
+import RequireAdminAuth from "@/layouts/RequireAdminAuth";
 
 const router = createBrowserRouter([
   {
@@ -29,23 +30,28 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    Component: AdminLayout,
+    Component: RequireAdminAuth,
     children: [
-      { index: true, Component: DashboardPage },
-      { path: "login", Component: AdminLoginPage },
       {
-        path: "courses",
+        Component: AdminLayout,
         children: [
-          { index: true, Component: AdminCoursePage },
-          { path: "new", Component: AdminNewCoursePage },
-
+          { index: true, Component: DashboardPage },
+          { path: "login", Component: AdminLoginPage },
           {
-            path: ":id",
-            Component: AdminCourseDetailsLayout,
+            path: "courses",
             children: [
-              { index: true, Component: AdminEditCoursePage },
-              { path: "sections", Component: AdminCourseSectionPage },
-              { path: "resources", Component: AdminResourcesPage },
+              { index: true, Component: AdminCoursePage },
+              { path: "new", Component: AdminNewCoursePage },
+
+              {
+                path: ":id",
+                Component: AdminCourseDetailsLayout,
+                children: [
+                  { index: true, Component: AdminEditCoursePage },
+                  { path: "sections", Component: AdminCourseSectionPage },
+                  { path: "resources", Component: AdminResourcesPage },
+                ],
+              },
             ],
           },
         ],

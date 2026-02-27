@@ -26,11 +26,18 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    console.log(originalRequest);
+
+    console.log(error.response?.status);
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = useAuthStore.getState().refreshToken;
+        const setAccessToken = useAuthStore.getState().setAccessToken;
+
+        console.log(refreshToken);
 
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
@@ -39,15 +46,20 @@ api.interceptors.response.use(
 
         const newAccessToken = res.data.accessToken;
 
-        localStorage.setItem("accessToken", newAccessToken);
+        console.log("New AccessToken: ", newAccessToken);
+
+        setAccessToken(newAccessToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
       } catch (err) {
         console.log(err);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+
+        const logout = useAuthStore.getState().logout;
+
+        logout();
+
         router.navigate("/login");
       }
     }

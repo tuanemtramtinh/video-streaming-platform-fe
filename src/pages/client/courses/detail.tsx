@@ -9,8 +9,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { CourseCardItem } from "@/components/CourseCardItem";
+import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
+import { useParams } from "react-router";
 
 export default function CourseDetailPage() {
+  const { id } = useParams();
+
   const settings = {
     infinite: true,
     speed: 500,
@@ -22,15 +26,32 @@ export default function CourseDetailPage() {
     pauseOnHover: true,
     pauseOnFocus: true,
   };
+
+  // console.log(id);
+
+  const { data } = useGetCourseDetail(id);
+
+  // console.log(data);
+
   return (
     <div className="relative">
       <div className="bg-background py-10">
         <div className="container mx-auto flex gap-10">
           <div className="w-[65%]">
-            <CourseDetailHeaderLeftColumn />
+            <CourseDetailHeaderLeftColumn
+              title={data?.title as string}
+              author={`${data?.instructor.lastName} ${data?.instructor.firstName}`}
+            />
           </div>
           <div className="w-[35%]">
-            <CourseDetailHeaderRightColumn />
+            <CourseDetailHeaderRightColumn
+              price={data?.price ?? 0}
+              discount={data?.discount ?? 0}
+              thumbnailUrl={
+                data?.thumbnailUrl ??
+                "https://placehold.co/600x400?text=Hello+World"
+              }
+            />
           </div>
         </div>
       </div>
@@ -45,9 +66,11 @@ export default function CourseDetailPage() {
               <button className="btn btn-soft btn-info">Đánh giá</button>
             </div>
 
-            <CourseDetailDesc />
+            <CourseDetailDesc content={data?.description as string} />
 
-            <CourseDetailTeacher />
+            <CourseDetailTeacher
+              author={`${data?.instructor.lastName} ${data?.instructor.firstName}`}
+            />
 
             <div className="border-border border-b py-6">
               <div className="mb-4 flex items-center justify-between">

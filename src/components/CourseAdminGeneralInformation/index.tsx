@@ -10,6 +10,10 @@ import Loading from "@/components/Loading";
 import { useCreateCourse } from "@/hooks/useCreateCourse";
 import { useNavigate, useParams } from "react-router";
 import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
+import type { ICourse } from "@/types/course.type";
+import type { UpdateCoursePayload } from "@/services/courses.service";
+import { useUpdateCourse } from "@/hooks/useUpdateCourse";
+import { AdminDeleteCourseModal } from "@/components/AdminDeleteCourseModal";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -22,18 +26,27 @@ export const CourseAdminGeneralInformation = ({
 
   const navigate = useNavigate();
 
+  const [initialData, setInitialData] = useState<ICourse | null>(null);
   const [courseName, setCourseName] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [smallDesc, setSmallDesc] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [pondFiles, setPondFiles] = useState<any[]>([]);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+
   const { data, isSuccess } = useGetCourseDetail(isEdit ? id : undefined);
 
   const { mutate: createCourse, isPending } = useCreateCourse();
+  const { mutate: updateCourse, isPending: isUpdatePending } =
+    useUpdateCourse();
 
   const handleSubmit = () => {
+    const fileItem = pondFiles[0];
+    const thumbnail = fileItem.file;
+
     createCourse(
       {
         title: courseName,
@@ -52,10 +65,45 @@ export const CourseAdminGeneralInformation = ({
     );
   };
 
+  const handleUpdate = () => {
+    if (!initialData) return;
+    const payload: UpdateCoursePayload = {
+      id: id as string,
+    };
+
+    if (courseName !== initialData.title) {
+      payload.title = courseName;
+    }
+
+    if (desc !== initialData.description) {
+      payload.description = desc;
+    }
+
+    if (price !== initialData.price.toString()) {
+      payload.price = price;
+    }
+
+    if (discount !== initialData.discount.toString()) {
+      payload.discount = discount;
+    }
+
+    const fileItem = pondFiles[0];
+
+    if (fileItem?.file instanceof File) {
+      payload.thumbnail = fileItem.file;
+    }
+
+    updateCourse(payload);
+  };
+
+  const handleDelete = () => {
+    setIsOpenDelete(true);
+  };
+
   useEffect(() => {
     if (data && isSuccess) {
-      console.log(data.thumbnailUrl);
       // eslint-disable-next-line react-hooks/set-state-in-effect
+      setInitialData(data);
       setCourseName(data.title);
       setDesc(data.description);
       setPrice(data.price.toString());
@@ -73,13 +121,21 @@ export const CourseAdminGeneralInformation = ({
 
   return (
     <div>
-      {isPending && <Loading />}
+      {(isPending || isUpdatePending || isLoadingDelete) && <Loading />}
+      {isEdit && (
+        <AdminDeleteCourseModal
+          id={id as string}
+          isOpen={isOpenDelete}
+          onClose={() => setIsOpenDelete(false)}
+          setLoading={setIsLoadingDelete}
+        />
+      )}
       <div className="mb-8 flex items-center justify-between">
         <div className="text-color-primary text-lg font-semibold">Chi tiết</div>
         <div className="flex gap-2">
-          <button className="btn bg-text-secondary rounded-lg text-white">
+          {/* <button className="btn bg-text-secondary rounded-lg text-white">
             Nháp
-          </button>
+          </button> */}
           {!isEdit && (
             <button
               className="btn btn-success rounded-lg text-white"
@@ -90,13 +146,19 @@ export const CourseAdminGeneralInformation = ({
           )}
           {isEdit && (
             <>
-              <button className="btn btn-success rounded-lg text-white">
+              <button
+                className="btn btn-success rounded-lg text-white"
+                onClick={handleUpdate}
+              >
                 Lưu
               </button>
               <button className="btn btn-info rounded-lg text-white">
                 Khôi phục
               </button>
-              <button className="btn btn-error rounded-lg text-white">
+              <button
+                className="btn btn-error rounded-lg text-white"
+                onClick={handleDelete}
+              >
                 Xoá
               </button>
             </>
@@ -137,8 +199,8 @@ export const CourseAdminGeneralInformation = ({
                 setPondFiles(items);
 
                 // Nếu user chọn file mới → lấy File
-                const file = (items[0]?.file as File) ?? null;
-                setThumbnail(file);
+                // const file = (items[0]?.file as File) ?? null;
+                // setThumbnail(file);
               }}
               labelIdle={`
                  <div class="flex flex-col items-center justify-center gap-2 w-full h-full py-8">

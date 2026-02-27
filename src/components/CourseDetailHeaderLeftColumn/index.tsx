@@ -1,24 +1,31 @@
 import { Rating } from "../Rating";
 
-export const CourseDetailHeaderLeftColumn = () => {
+export const CourseDetailHeaderLeftColumn = ({
+  title,
+  author,
+}: {
+  title: string;
+  author: string;
+}) => {
   return (
     <div className="">
       <div className="breadcrumbs mb-10 text-sm">
         <ul>
           <li>Trang chủ</li>
           <li>Khoá học</li>
-          <li>Giới thiệu về Thiết kế trải nghiệm người dùng</li>
+          <li>{title}</li>
         </ul>
       </div>
 
-      <h2 className="mb-5 text-[40px] font-bold">
-        Giới thiệu về Thiết kế trải nghiệm người dùng
-      </h2>
-      <p className="mb-6">
+      <h2 className="mb-5 text-[40px] font-bold">{title}</h2>
+      <div className="mb-6">
         Khóa học này được thiết kế tỉ mỉ nhằm cung cấp cho bạn nền tảng kiến
         thức về các nguyên tắc, phương pháp luận và công cụ tạo nên trải nghiệm
         người dùng xuất sắc trong môi trường kỹ thuật số.
-      </p>
+        {/* <div className="prose w-full max-w-none">
+          <div dangerouslySetInnerHTML={{ __html: content }} />
+        </div> */}
+      </div>
 
       <div className="mb-6 flex items-center gap-3">
         <div className="flex items-center">
@@ -36,7 +43,7 @@ export const CourseDetailHeaderLeftColumn = () => {
           </div>
         </div>
         <span>
-          Tạo bởi <span className="text-info">Ronal Richards</span>
+          Tạo bởi <span className="text-info">{author}</span>
         </span>
       </div>
     </div>

@@ -1,5 +1,17 @@
 import type { IPagination } from "@/types/pagination";
 
+interface IInstructor {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+interface ICategory {
+  id: number;
+  name: number;
+}
+
 export interface ICourse {
   id: number;
   title: string;
@@ -8,6 +20,9 @@ export interface ICourse {
 
   categoryId: number;
   instructorId: number;
+
+  category: ICategory;
+  instructor: IInstructor;
 
   price: number;
   discount: number;
@@ -20,5 +35,5 @@ export interface ICourse {
 
 export interface ICourseResponse {
   data: ICourse[];
-  pagination: IPagination;
+  meta: IPagination;
 }

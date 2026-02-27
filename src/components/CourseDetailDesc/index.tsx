@@ -1,17 +1,23 @@
-export const CourseDetailDesc = () => {
+export const CourseDetailDesc = ({ content }: { content: string }) => {
   return (
     <div className="border-border border-b py-6">
-      <div className="mb-6">
+      <h2 className="text-color-primary mb-1 text-xl font-semibold">
+        Mô tả khoá học
+      </h2>
+      <div className="prose w-full max-w-none">
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </div>
+      {/* <div className="mb-6">
         <h2 className="text-color-primary mb-1 text-xl font-semibold">
           Mô tả khoá học
         </h2>
-        <p className="text-justify">
+        <div className="text-justify">
           Khóa học trực tuyến tương tác này sẽ giới thiệu cho bạn về thiết kế
           Trải nghiệm người dùng (UX), nghệ thuật tạo ra các sản phẩm và dịch vụ
           trực quan, thú vị và thân thiện với người dùng. Bạn sẽ có được nền
           tảng vững chắc về các nguyên tắc UX và học cách áp dụng chúng vào các
           tình huống thực tế thông qua các mô-đun hấp dẫn và bài tập tương tác.
-        </p>
+        </div>
       </div>
 
       <div>
@@ -34,7 +40,7 @@ export const CourseDetailDesc = () => {
             thiết kế hình ảnh.
           </li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };

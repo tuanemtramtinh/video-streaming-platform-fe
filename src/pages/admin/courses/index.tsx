@@ -1,8 +1,7 @@
+import Pagination from "@/components/Pagination";
 import { useGetCourse } from "@/hooks/useGetCourse";
-import type { ICourseResponse } from "@/types/course.type";
 import { Search } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 const CardItem = ({ title, desc }: { title: string; desc: string }) => {
   return (
@@ -51,10 +50,21 @@ const Card = ({
 };
 
 export default function AdminCoursePage() {
-  const [page, setPage] = useState(1);
-  const limit = 9;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const { data, isLoading } = useGetCourse(page, limit);
+  const pageFromUrl = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 9;
+
+  const { data, isLoading } = useGetCourse(pageFromUrl, limit);
+
+  const handleChangePage = (page: number) => {
+    setSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+  };
+
+  const lastPage = data?.meta?.lastPage ?? 1;
 
   return (
     <div className="flex h-full flex-col">
@@ -86,12 +96,11 @@ export default function AdminCoursePage() {
             <div>No Course</div>
           )}
         </div>
-        <div className="join justify-center">
-          <button className="join-item btn">1</button>
-          <button className="join-item btn btn-active">2</button>
-          <button className="join-item btn">3</button>
-          <button className="join-item btn">4</button>
-        </div>
+        <Pagination
+          currentPage={pageFromUrl}
+          lastPage={lastPage}
+          onChange={handleChangePage}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,17 @@
 import api from "@/lib/axios";
 import type { ICourse, ICourseResponse } from "@/types/course.type";
 
+export type CreateCoursePayload = {
+  title: string;
+  description: string;
+  thumbnail: File;
+  price: string;
+  discount: string;
+  categoryId: string;
+};
+
+export type UpdateCoursePayload = { id: string } & Partial<CreateCoursePayload>;
+
 export const getCourseApi = async ({
   page = 1,
   limit = 9,
@@ -31,14 +42,7 @@ export const createCourseApi = async ({
   price,
   discount,
   categoryId = "3",
-}: {
-  title: string;
-  description: string;
-  thumbnail: File;
-  price: string;
-  discount: string;
-  categoryId: string;
-}) => {
+}: CreateCoursePayload) => {
   const formData = new FormData();
   formData.append("title", title);
   formData.append("description", description);
@@ -50,4 +54,47 @@ export const createCourseApi = async ({
   const res = await api.post("/courses", formData);
 
   return res.data;
+};
+
+export const updateCourseApi = async ({
+  id,
+  title,
+  description,
+  thumbnail,
+  price,
+  discount,
+  categoryId = "3",
+}: UpdateCoursePayload) => {
+  const formData = new FormData();
+
+  if (title !== undefined) {
+    formData.append("title", title);
+  }
+
+  if (description !== undefined) {
+    formData.append("description", description);
+  }
+
+  if (price !== undefined) {
+    formData.append("price", price);
+  }
+
+  if (discount !== undefined) {
+    formData.append("discount", discount);
+  }
+
+  if (categoryId !== undefined) {
+    formData.append("categoryId", categoryId);
+  }
+
+  // ⚠️ thumbnail xử lý riêng
+  if (thumbnail && thumbnail instanceof File) {
+    formData.append("thumbnail", thumbnail);
+  }
+
+  return api.patch(`/courses/${id}`, formData);
+};
+
+export const deleteCourseApi = async ({ id }: { id: string }) => {
+  return api.delete(`/courses/${id}`);
 };
