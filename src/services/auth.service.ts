@@ -17,17 +17,20 @@ export const registerApi = async ({
   lastName,
   email,
   password,
+  confirmPassword,
 }: {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }) => {
   const res = await api.post("/auth/register", {
     firstName,
     lastName,
     email,
     password,
+    confirmPassword,
   });
 
   return res.data;

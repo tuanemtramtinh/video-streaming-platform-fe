@@ -14,6 +14,7 @@ import type { ICourse } from "@/types/course.type";
 import type { UpdateCoursePayload } from "@/services/courses.service";
 import { useUpdateCourse } from "@/hooks/useUpdateCourse";
 import { AdminDeleteCourseModal } from "@/components/AdminDeleteCourseModal";
+import { toast } from "react-toastify";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -44,6 +45,11 @@ export const CourseAdminGeneralInformation = ({
     useUpdateCourse();
 
   const handleSubmit = () => {
+    if (!courseName || !desc || pondFiles.length === 0 || !price || !discount) {
+      toast.error("Vui lòng điền đầy đủ các trường");
+      return;
+    }
+
     const fileItem = pondFiles[0];
     const thumbnail = fileItem.file;
 
