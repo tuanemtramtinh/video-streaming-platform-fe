@@ -29,6 +29,25 @@ export const getCourseApi = async ({
   return res.data as ICourseResponse | undefined;
 };
 
+export const getCourseByInstructorIdApi = async ({
+  instructorId,
+  page = 1,
+  limit = 9,
+}: {
+  instructorId: string;
+  page: number;
+  limit: number;
+}) => {
+  const res = await api.get(`courses/instructor/${instructorId}`, {
+    params: {
+      page,
+      limit,
+    },
+  });
+
+  return res.data;
+};
+
 export const getCourseDetailApi = async ({ id }: { id: string | number }) => {
   const res = await api.get(`courses/${id}`);
 

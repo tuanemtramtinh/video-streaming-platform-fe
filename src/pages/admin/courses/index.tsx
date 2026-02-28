@@ -1,5 +1,6 @@
 import Pagination from "@/components/Pagination";
-import { useGetCourse } from "@/hooks/useGetCourse";
+import { useGetCourseByInstructor } from "@/hooks/useGetCourseByInstructor";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { Search } from "lucide-react";
 import { Link, useSearchParams } from "react-router";
 
@@ -50,12 +51,18 @@ const Card = ({
 };
 
 export default function AdminCoursePage() {
+  const user = useAuthStore((state) => state.user);
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 9;
 
-  const { data, isLoading } = useGetCourse(pageFromUrl, limit);
+  const { data, isLoading } = useGetCourseByInstructor(
+    user?.id as string,
+    pageFromUrl,
+    limit,
+  );
 
   const handleChangePage = (page: number) => {
     setSearchParams({
