@@ -9,7 +9,8 @@ import {
   Settings,
 } from "lucide-react";
 import { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
+import LogoLight from "@/assets/logo-light.svg";
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -35,7 +36,10 @@ export default function AdminLayout() {
           className="drawer-overlay"
         ></label>
         <div className="bg-color-primary is-drawer-close:w-[5vw] is-drawer-open:w-[15vw] flex min-h-full flex-col items-start p-4 text-white">
-          <div className="is-drawer-open:justify-end is-drawer-close:justify-center flex w-full">
+          <div className="is-drawer-open:justify-between is-drawer-close:justify-center mb-6 flex w-full">
+            <div className="is-drawer-close:hidden">
+              <img src={LogoLight} className="h-10 object-contain" alt="" />
+            </div>
             <label
               htmlFor="my-drawer"
               aria-label="open sidebar"
@@ -47,22 +51,27 @@ export default function AdminLayout() {
           <ul className="menu w-full flex-1">
             {/* Sidebar content here */}
             <li>
-              <Link
+              <NavLink
                 to={"/admin"}
-                className="is-drawer-close:px-0 is-drawer-close:justify-center flex w-full items-center py-4"
+                end
+                className={({ isActive }) =>
+                  `"is-drawer-close:px-0 is-drawer-close:justify-center py-4" flex w-full items-center ${isActive ? "text-text-fourthdary" : "text-white"}`
+                }
               >
                 <Gauge className="" />
                 <span className="is-drawer-close:hidden">Bảng điều khiển</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to={"/admin/courses"}
-                className="is-drawer-close:px-0 is-drawer-close:justify-center flex w-full items-center py-4"
+                className={({ isActive }) =>
+                  `"is-drawer-close:px-0 is-drawer-close:justify-center py-4" flex w-full items-center py-4 ${isActive ? "text-text-fourthdary" : "text-white"}`
+                }
               >
                 <Book className="" />
                 <span className="is-drawer-close:hidden">Khoá học</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
               <Link

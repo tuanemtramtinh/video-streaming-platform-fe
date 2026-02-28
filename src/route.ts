@@ -36,6 +36,7 @@ const router = createBrowserRouter([
         Component: AdminLayout,
         children: [
           { index: true, Component: DashboardPage },
+          { path: "dashboard", Component: DashboardPage },
           { path: "login", Component: AdminLoginPage },
           {
             path: "courses",
@@ -59,7 +60,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-//hello
 
 export default router;
