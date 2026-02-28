@@ -31,7 +31,9 @@ export const CourseDetailHeaderRightColumn = ({
               {price.toLocaleString()} VND
             </span>
           </div>
-          {discount > 0 && <div className="text-success">Ưu đãi 50%</div>}
+          {discount > 0 && (
+            <div className="text-success">Ưu đãi {discount}%</div>
+          )}
         </div>
         <div className="card-actions mt-6">
           <button className="btn btn-neutral btn-block">Đăng ký học</button>
