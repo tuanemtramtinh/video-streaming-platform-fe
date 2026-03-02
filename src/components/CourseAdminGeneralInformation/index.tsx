@@ -2,6 +2,7 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { AdminCustomInput } from "@/components/AdminCustomInput";
@@ -16,7 +17,11 @@ import { useUpdateCourse } from "@/hooks/useUpdateCourse";
 import { AdminDeleteCourseModal } from "@/components/AdminDeleteCourseModal";
 import { toast } from "react-toastify";
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+registerPlugin(
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType,
+);
 
 export const CourseAdminGeneralInformation = ({
   isEdit = false,
@@ -201,6 +206,12 @@ export const CourseAdminGeneralInformation = ({
               className="filepond tw-filepond"
               allowMultiple={false}
               files={pondFiles}
+              acceptedFileTypes={[
+                "image/png",
+                "image/jpeg",
+                "image/jpg",
+                "image/webp",
+              ]}
               onupdatefiles={(items) => {
                 setPondFiles(items);
 
