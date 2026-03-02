@@ -116,7 +116,7 @@ export const CourseAdminGeneralInformation = ({
       setDiscount(data.discount.toString());
       setPondFiles([
         {
-          source: data.thumbnailUrl,
+          source: `${data.thumbnailUrl}?t=${Date.now()}`,
           options: {
             type: "remote",
           },
