@@ -1,9 +1,51 @@
 import { AdminNewSectionModal } from "@/components/AdminNewSectionModal";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import type { ISectionRow } from "@/types/section.type";
+import { Search } from "lucide-react";
 import { useState } from "react";
+import { DataTable } from "@/components/DataTable";
+import type { ColumnDef } from "@tanstack/react-table";
+import { useNavigate, useParams } from "react-router";
 
 export default function AdminCourseSectionPage() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const data: ISectionRow[] = [
+    {
+      id: 1,
+      orderIndex: 1,
+      title: "The Solid State",
+      createdAt: "15/12/2025",
+      status: "Public",
+    },
+    {
+      id: 2,
+      orderIndex: 2,
+      title: "Quantum Physics",
+      createdAt: "16/12/2025",
+      status: "Draft",
+    },
+  ];
+
+  const columns: ColumnDef<ISectionRow>[] = [
+    {
+      accessorKey: "orderIndex",
+      header: "Chương",
+    },
+    {
+      accessorKey: "title",
+      header: "Tiêu đề",
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Ngày đăng",
+    },
+    {
+      accessorKey: "status",
+      header: "Trạng thái",
+    },
+  ];
 
   return (
     <div className="flex flex-1 flex-col">
@@ -26,52 +68,13 @@ export default function AdminCourseSectionPage() {
       </label>
       <div className="flex flex-1 flex-col gap-6">
         <div className="flex-1 overflow-x-auto">
-          <table className="border-border table border bg-white">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>Chương</th>
-                <th>Tiêu đề</th>
-                <th>Ngày đăng</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              <tr className="hover:bg-background">
-                <th>1</th>
-                <td>The Solid State</td>
-                <td>15/12/2025</td>
-                <td>Public</td>
-              </tr>
-              {/* row 2 */}
-              <tr className="hover:bg-background">
-                <th>2</th>
-                <td>The Solid State</td>
-                <td>15/12/2025</td>
-                <td>Public</td>
-              </tr>
-              {/* row 3 */}
-              <tr className="hover:bg-background">
-                <th>3</th>
-                <td>The Solid State</td>
-                <td>15/12/2025</td>
-                <td>Public</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="join w-full justify-center">
-          <button className="join-item btn">
-            <ChevronLeft size={14} />
-          </button>
-          <button className="join-item btn">1</button>
-          <button className="join-item btn btn-active">2</button>
-          <button className="join-item btn">3</button>
-          <button className="join-item btn">4</button>
-          <button className="join-item btn">
-            <ChevronRight size={14} />
-          </button>
+          <DataTable
+            columns={columns}
+            data={data}
+            onRowClick={() => {
+              navigate(`/admin/courses/${id}/sections/1`);
+            }}
+          />
         </div>
       </div>
     </div>

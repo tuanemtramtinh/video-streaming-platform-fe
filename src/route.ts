@@ -1,20 +1,31 @@
 import { createBrowserRouter } from "react-router";
+
 import AppLayout from "./layouts/AppLayout";
+import AdminLayout from "./layouts/AdminLayout";
+import RequireAdminAuth from "@/layouts/RequireAdminAuth";
+
 import HomePage from "./pages/client/home";
 import LoginPage from "./pages/client/login";
 import RegisterPage from "./pages/client/register";
-import AdminLayout from "./layouts/AdminLayout";
-import DashboardPage from "./pages/admin/dashboard";
-import AdminLoginPage from "./pages/admin/login";
 import CoursePage from "./pages/client/courses";
 import CourseDetailPage from "./pages/client/courses/detail";
+
+import DashboardPage from "./pages/admin/dashboard";
+import AdminLoginPage from "./pages/admin/login";
+
 import AdminCoursePage from "./pages/admin/courses";
 import AdminNewCoursePage from "./pages/admin/courses/new";
-import AdminEditCoursePage from "@/pages/admin/courses/details";
+
 import AdminCourseDetailsLayout from "@/layouts/AdminCourseDetailsLayout";
-import AdminCourseSectionPage from "@/pages/admin/courses/sections";
+import AdminEditCoursePage from "@/pages/admin/courses/details";
 import AdminResourcesPage from "@/pages/admin/courses/resources";
-import RequireAdminAuth from "@/layouts/RequireAdminAuth";
+
+import AdminCourseSectionPage from "@/pages/admin/courses/sections";
+import AdminCourseSectionDetailsPage from "@/pages/admin/courses/sections/details";
+import AdminSectionDetailsLayout from "@/layouts/AdminSectionDetailsLayout";
+import AdminLessonsPage from "./pages/admin/courses/lessons";
+import AdminNewLessonPage from "./pages/admin/courses/lessons/new";
+import AdminLessonDetailPage from "./pages/admin/courses/lessons/details";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +39,7 @@ const router = createBrowserRouter([
       { path: "courses/:id", Component: CourseDetailPage },
     ],
   },
+
   {
     path: "/admin",
     Component: RequireAdminAuth,
@@ -38,19 +50,41 @@ const router = createBrowserRouter([
           { index: true, Component: DashboardPage },
           { path: "dashboard", Component: DashboardPage },
           { path: "login", Component: AdminLoginPage },
+
           {
             path: "courses",
             children: [
               { index: true, Component: AdminCoursePage },
               { path: "new", Component: AdminNewCoursePage },
 
+              // course layout
               {
                 path: ":id",
                 Component: AdminCourseDetailsLayout,
                 children: [
                   { index: true, Component: AdminEditCoursePage },
-                  { path: "sections", Component: AdminCourseSectionPage },
                   { path: "resources", Component: AdminResourcesPage },
+                  { path: "sections", Component: AdminCourseSectionPage },
+                ],
+              },
+
+              // SECTION layout riêng
+              {
+                path: ":id/sections/:sectionId",
+                Component: AdminSectionDetailsLayout,
+                children: [
+                  {
+                    index: true,
+                    Component: AdminCourseSectionDetailsPage,
+                  },
+                  {
+                    path: "lessons",
+                    children: [
+                      { index: true, Component: AdminLessonsPage },
+                      { path: "new", Component: AdminNewLessonPage },
+                      { path: ":lessonId", Component: AdminLessonDetailPage },
+                    ],
+                  },
                 ],
               },
             ],
