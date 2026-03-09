@@ -1,3 +1,4 @@
+import type { ILesson } from "./lesson.type";
 import type { IPagination } from "./pagination";
 
 export const SectionStatus = {
@@ -22,6 +23,7 @@ export interface ISection {
   title: string;
   orderIndex: number;
   status: SectionStatus;
+  lessons: ILesson[];
 }
 
 export interface ISectionResponse {

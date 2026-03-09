@@ -8,8 +8,35 @@ import {
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
+import { useGetCourseDetailWithSectionsAndLessons } from "@/hooks/usegetCourseDetailWithSectionsAndLessons";
+import { useParams } from "react-router";
+import { type ILesson, LessonType } from "@/types/lesson.type";
+import { useEffect, useState } from "react";
+import { type ISection } from "@/types/section.type";
 
 export default function SectionsPage() {
+  const { id, sectionId, lessonId } = useParams();
+
+  const { data, isSuccess } = useGetCourseDetailWithSectionsAndLessons(
+    id as string,
+  );
+
+  const [lesson, setLesson] = useState<ILesson | null>(null);
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      const currentSection = data.sections.find(
+        (section) => section.id === Number(sectionId),
+      );
+      const currentLesson = (currentSection?.lessons || []).find(
+        (lesson) => lesson.id === Number(lessonId),
+      );
+
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLesson(currentLesson!);
+    }
+  }, [data, isSuccess, sectionId, lessonId]);
+
   return (
     <div className="container mx-auto">
       <div className="py-10">
@@ -19,7 +46,7 @@ export default function SectionsPage() {
               <ChevronLeft />
             </button>
             <h2 className="text-color-primary text-2xl font-semibold">
-              Giới thiệu về Thiết kế Trải nghiệm Người dùng
+              {lesson?.title ?? "Loading..."}
             </h2>
           </div>
           <div className="flex gap-3">
@@ -77,47 +104,46 @@ export default function SectionsPage() {
           </div>
         </div>
 
-        <div className="flex gap-10">
+        <div className="flex items-start gap-10">
           <div className="flex-8">
-            <div className="mb-6 aspect-video w-full overflow-hidden rounded-xl">
-              <MediaPlayer
-                title="Jujutsu Kaisen"
-                src="https://s3-hcm-r2.s3cloud.vn/video/jujutsu-kaisen/ep-01/master.m3u8"
-                crossOrigin
-              >
-                <MediaProvider>
-                  <Track
-                    src="https://s3-hcm-r2.s3cloud.vn/video/jujutsu-kaisen/ep-01/subtitles/vi.vtt"
-                    kind="subtitles"
-                    label="Tiếng Việt"
-                    lang="vi"
-                    default
-                  />
-                </MediaProvider>
-                <DefaultVideoLayout icons={defaultLayoutIcons} />
-              </MediaPlayer>
-            </div>
-            <div>
-              <h2 className="text-color-primary mb-6 text-2xl font-semibold">
-                Understanding User-Centered Design
-              </h2>
-              <div>
-                Một phần tử HTML thường bao gồm thẻ mở và thẻ đóng, với nội dung
-                được chèn giữa cặp thẻ. Phần tử thường có cấu trúc như sau:
-                Những phần tử HTML không có nội dung được gọi là phần tử rỗng.
-                Các phần tử rỗng không có thẻ đóng, ví dụ như thẻ {"<br>"} (thẻ
-                này dùng để ngắt dòng.)
+            {lesson && lesson.lessonType === LessonType.VIDEO && (
+              <div className="mb-6 aspect-video w-full overflow-hidden rounded-xl">
+                <MediaPlayer
+                  title="Jujutsu Kaisen"
+                  src="https://s3-hcm-r2.s3cloud.vn/video/jujutsu-kaisen/ep-01/master.m3u8"
+                  crossOrigin
+                >
+                  <MediaProvider>
+                    <Track
+                      src="https://s3-hcm-r2.s3cloud.vn/video/jujutsu-kaisen/ep-01/subtitles/vi.vtt"
+                      kind="subtitles"
+                      label="Tiếng Việt"
+                      lang="vi"
+                      default
+                    />
+                  </MediaProvider>
+                  <DefaultVideoLayout icons={defaultLayoutIcons} />
+                </MediaPlayer>
               </div>
-            </div>
+            )}
+            <div
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{ __html: lesson?.contentText ?? "" }}
+            />
           </div>
-          <div className="bg-background border-border x flex-4 rounded-xl border">
+          <div className="bg-background border-border flex-4 rounded-xl border">
             <h2 className="text-color-primary border-border border-b p-4 text-xl font-semibold">
               Tiến độ khoá học
             </h2>
+            <div>
+              {(data?.sections ?? []).map((section) => (
+                <CustomizableCollapse key={section.id} section={section} />
+              ))}
+            </div>
+            {/* <CustomizableCollapse /> */}
+            {/* <CustomizableCollapse />
             <CustomizableCollapse />
-            <CustomizableCollapse />
-            <CustomizableCollapse />
-            <CustomizableCollapse />
+            <CustomizableCollapse /> */}
           </div>
         </div>
       </div>

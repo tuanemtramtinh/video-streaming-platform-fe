@@ -1,59 +1,80 @@
-export const CourseDetailSectionList = () => {
+import type { ILesson } from "@/types/lesson.type";
+import type { ISection } from "@/types/section.type";
+import { FileQuestionMark, FileText, PlayCircle } from "lucide-react";
+import { Link, useParams } from "react-router";
+
+const lessonTypeIcon = {
+  video: PlayCircle,
+  document: FileText,
+  quiz: FileQuestionMark,
+};
+
+const ListItem = ({
+  courseId,
+  sectionId,
+  lesson,
+}: {
+  courseId: string;
+  sectionId: number;
+  lesson: ILesson;
+}) => {
+  const Icon = lessonTypeIcon[lesson.lessonType];
+  return (
+    <Link
+      to={`/courses/${courseId}/sections/${sectionId}/lessons/${lesson.id}`}
+      className="border-border flex items-center justify-between border-b py-3"
+    >
+      <div>{lesson.title}</div>
+      <div>
+        <Icon />
+      </div>
+    </Link>
+  );
+};
+
+const SectionItem = ({ section }: { section: ISection }) => {
+  const { id } = useParams();
+
+  return (
+    <div className="join-item border-border collapse-arrow collapse border">
+      <input type="checkbox" name="my-accordion-1" />
+      <div className="collapse-title font-semibold">
+        <div className="flex items-center justify-between">
+          <h3 className="text-color-primary text-lg font-semibold">
+            {section.title}
+          </h3>
+          <div className="text-text-secondary text-sm font-normal">
+            <span className="mr-4">5 Bài học</span>
+            <span>1 Giờ</span>
+          </div>
+        </div>
+      </div>
+      <div className="collapse-content text-sm">
+        <div className="flex flex-col gap-4">
+          {section.lessons.map((lesson) => (
+            <ListItem
+              key={lesson.id}
+              courseId={id as string}
+              sectionId={section.id}
+              lesson={lesson}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const CourseDetailSectionList = ({
+  sections,
+}: {
+  sections: ISection[];
+}) => {
   return (
     <div className="join join-vertical w-full">
-      <div className="join-item border-border collapse-arrow collapse border">
-        <input type="checkbox" name="my-accordion-1" defaultChecked />
-        <div className="collapse-title font-semibold">
-          <div className="flex items-center justify-between">
-            <h3 className="text-color-primary text-lg font-semibold">
-              Introduction to UX Design
-            </h3>
-            <div className="text-text-secondary text-sm font-normal">
-              <span className="mr-4">5 Bài học</span>
-              <span>1 Giờ</span>
-            </div>
-          </div>
-        </div>
-        <div className="collapse-content text-sm">
-          Click the "Sign Up" button in the top right corner and follow the
-          registration process.
-        </div>
-      </div>
-      <div className="join-item border-border collapse-arrow collapse border">
-        <input type="checkbox" name="my-accordion-1" />
-        <div className="collapse-title font-semibold">
-          <div className="flex items-center justify-between">
-            <h3 className="text-color-primary text-lg font-semibold">
-              Basics of User-Centered Design
-            </h3>
-            <div className="text-text-secondary text-sm font-normal">
-              <span className="mr-4">5 Bài học</span>
-              <span>1 Giờ</span>
-            </div>
-          </div>
-        </div>
-        <div className="collapse-content text-sm">
-          Click on "Forgot Password" on the login page and follow the
-          instructions sent to your email.
-        </div>
-      </div>
-      <div className="join-item border-border collapse-arrow collapse border">
-        <input type="checkbox" name="my-accordion-1" />
-        <div className="collapse-title font-semibold">
-          <div className="flex items-center justify-between">
-            <h3 className="text-color-primary text-lg font-semibold">
-              Elements of User Experience
-            </h3>
-            <div className="text-text-secondary text-sm font-normal">
-              <span className="mr-4">5 Bài học</span>
-              <span>1 Giờ</span>
-            </div>
-          </div>
-        </div>
-        <div className="collapse-content text-sm">
-          Go to "My Account" settings and select "Edit Profile" to make changes.
-        </div>
-      </div>
+      {sections.map((section) => (
+        <SectionItem key={section.id} section={section} />
+      ))}
     </div>
   );
 };

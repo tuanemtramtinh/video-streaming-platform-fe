@@ -1,4 +1,5 @@
 import type { IPagination } from "@/types/pagination";
+import type { ISection } from "./section.type";
 
 interface IInstructor {
   id: number;
@@ -31,6 +32,10 @@ export interface ICourse {
 
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
+}
+
+export interface ICourseDetail extends ICourse {
+  sections: ISection[];
 }
 
 export interface ICourseResponse {

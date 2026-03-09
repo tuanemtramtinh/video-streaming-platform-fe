@@ -9,8 +9,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { CourseCardItem } from "@/components/CourseCardItem";
-import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 import { useParams } from "react-router";
+import { useGetCourseDetailWithSectionsAndLessons } from "@/hooks/usegetCourseDetailWithSectionsAndLessons";
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -29,7 +29,7 @@ export default function CourseDetailPage() {
 
   // console.log(id);
 
-  const { data } = useGetCourseDetail(id);
+  const { data } = useGetCourseDetailWithSectionsAndLessons(id as string);
 
   // console.log(data);
 
@@ -78,7 +78,7 @@ export default function CourseDetailPage() {
                 <div className="text-text-fourthdary text-sm">Xem tất cả</div>
               </div>
 
-              <CourseDetailSectionList />
+              <CourseDetailSectionList sections={data?.sections ?? []} />
             </div>
           </div>
         </div>

@@ -1,5 +1,39 @@
-import { Video } from "lucide-react";
+import type { ILesson } from "@/types/lesson.type";
+import type { ISection } from "@/types/section.type";
+import { FileQuestionMark, FileText, PlayCircle } from "lucide-react";
 import type { ReactNode } from "react";
+import { Link, useParams } from "react-router";
+
+const lessonTypeIcon = {
+  video: PlayCircle,
+  document: FileText,
+  quiz: FileQuestionMark,
+};
+
+const LessonItem = ({
+  sectionId,
+  lesson,
+}: {
+  sectionId: number;
+  lesson: ILesson;
+}) => {
+  const { id } = useParams();
+  const Icon = lessonTypeIcon[lesson.lessonType];
+
+  return (
+    <Link
+      to={`/courses/${id}/sections/${sectionId}/lessons/${lesson.id}`}
+      className="group flex items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-gray-100"
+    >
+      <div className="text-color-primary group-hover:underline">
+        {lesson.title}
+      </div>
+      <div className="text-text-secondary flex items-center gap-1 group-hover:text-color-primary">
+        <Icon />
+      </div>
+    </Link>
+  );
+};
 
 const CollapseItem = ({
   title,
@@ -21,7 +55,7 @@ const CollapseItem = ({
   );
 };
 
-export const CustomizableCollapse = () => {
+export const CustomizableCollapse = ({ section }: { section: ISection }) => {
   return (
     <div className="join join-vertical w-full">
       <CollapseItem
@@ -29,7 +63,7 @@ export const CustomizableCollapse = () => {
         title={
           <div className="flex items-center justify-between">
             <h3 className="text-color-primary text-md font-semibold">
-              1. Introduction to UX Design
+              {section.title}
             </h3>
             <div className="text-text-secondary text-sm font-normal">
               <span className="mr-4">5 Bài học</span>
@@ -39,22 +73,13 @@ export const CustomizableCollapse = () => {
         }
         content={
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <div className="text-color-primary">
-                1. What is User Experience (UX) Design?
-              </div>
-              <div className="text-text-secondary flex items-center gap-1">
-                <Video />4 phút
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="text-color-primary">
-                2. What is User Experience (UX) Design?
-              </div>
-              <div className="text-text-secondary flex items-center gap-1">
-                <Video />4 phút
-              </div>
-            </div>
+            {section.lessons.map((lesson) => (
+              <LessonItem
+                key={lesson.id}
+                sectionId={section.id}
+                lesson={lesson}
+              />
+            ))}
           </div>
         }
       />
