@@ -1,5 +1,9 @@
 import api from "@/lib/axios";
-import type { ISection, ISectionResponse } from "@/types/section.type";
+import type {
+  ISection,
+  ISectionResponse,
+  SectionStatus,
+} from "@/types/section.type";
 
 export const getSectionsByCourseIdApi = async (
   courseId: number,
@@ -36,5 +40,25 @@ export const createSectionApi = async ({
 
 export const getSectionById = async (sectionId: string) => {
   const res = await api.get(`/sections/${sectionId}`);
+  return res.data as ISection;
+};
+
+export const updateSection = async ({
+  sectionId,
+  title,
+  orderIndex,
+  status,
+}: {
+  sectionId: string;
+  title?: string | undefined;
+  orderIndex?: number | undefined;
+  status?: SectionStatus | undefined;
+}) => {
+  const res = await api.patch(`/sections/${sectionId}`, {
+    title,
+    orderIndex,
+    status,
+  });
+
   return res.data as ISection;
 };

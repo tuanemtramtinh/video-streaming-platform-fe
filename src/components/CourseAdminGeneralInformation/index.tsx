@@ -16,6 +16,7 @@ import type { UpdateCoursePayload } from "@/services/courses.service";
 import { useUpdateCourse } from "@/hooks/useUpdateCourse";
 import { AdminDeleteCourseModal } from "@/components/AdminDeleteCourseModal";
 import { toast } from "react-toastify";
+import { useCourseStore } from "@/stores/useCourseStore";
 
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -31,6 +32,8 @@ export const CourseAdminGeneralInformation = ({
   const { id } = useParams<{ id: string }>();
 
   const navigate = useNavigate();
+
+  const setCurrentCourse = useCourseStore((state) => state.setCurrentCourse);
 
   const [initialData, setInitialData] = useState<ICourse | null>(null);
   const [courseName, setCourseName] = useState("");
@@ -115,6 +118,7 @@ export const CourseAdminGeneralInformation = ({
     if (data && isSuccess) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialData(data);
+      setCurrentCourse(data);
       setCourseName(data.title);
       setDesc(data.description);
       setPrice(data.price.toString());
@@ -128,7 +132,7 @@ export const CourseAdminGeneralInformation = ({
         },
       ]);
     }
-  }, [data, isSuccess]);
+  }, [data, isSuccess, setCurrentCourse]);
 
   return (
     <div>

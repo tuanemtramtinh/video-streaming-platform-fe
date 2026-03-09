@@ -48,3 +48,37 @@ export const getLessonDetail = async (lessonId: string) => {
 
   return res.data as ILesson;
 };
+
+export const updateLesson = async ({
+  lessonId,
+  title,
+  orderIndex,
+  lessonType,
+  contentText,
+}: {
+  lessonId: string;
+  title?: string;
+  orderIndex?: number;
+  lessonType?: LessonType;
+  contentText?: string;
+}) => {
+  const body = {
+    title,
+    orderIndex,
+    lessonType,
+    contentText,
+  };
+
+  const filteredBody = Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(body).filter(([_, v]) => v !== undefined),
+  );
+
+  const res = await api.patch(`/lessons/${lessonId}`, filteredBody);
+
+  return res.data;
+};
+
+export const deleteLesson = async ({ id }: { id: string }) => {
+  return api.delete(`/lessons/${id}`);
+};

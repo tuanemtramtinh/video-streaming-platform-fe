@@ -1,9 +1,14 @@
+import { useCourseStore } from "@/stores/useCourseStore";
 import { NavLink, Outlet } from "react-router";
 
 export default function AdminCourseDetailsLayout() {
+  const currentCourse = useCourseStore((state) => state.currentCourse);
+
   return (
     <div className="flex h-full flex-col">
-      <h2 className="mb-4 text-2xl font-semibold">Khoá học DSA</h2>
+      <h2 className="mb-4 text-2xl font-semibold">
+        {currentCourse ? currentCourse.title : "Loading..."}
+      </h2>
 
       <div role="tablist" className="tabs tabs-border mb-6">
         <NavLink

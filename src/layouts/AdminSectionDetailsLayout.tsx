@@ -1,3 +1,4 @@
+import { useSectionStore } from "@/stores/useSectionStore";
 import { ChevronLeft } from "lucide-react";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router";
 
@@ -5,6 +6,8 @@ export default function AdminSectionDetailsLayout() {
   const navigate = useNavigate();
 
   const { id } = useParams();
+
+  const section = useSectionStore((state) => state.section);
 
   return (
     <div className="flex h-full flex-col">
@@ -16,15 +19,10 @@ export default function AdminSectionDetailsLayout() {
             />
           </button>
           <h2 className="ml-2 text-2xl font-semibold">
-            Chương 1 - Linked List
+            {section
+              ? `Chương ${section.orderIndex} - ${section.title}`
+              : "Loading..."}
           </h2>
-        </div>
-        <div className="flex gap-2">
-          <button className="btn btn-info">Lưu</button>
-          <button className="btn border-border bg-white">
-            Chuyển sang Nháp
-          </button>
-          <button className="btn btn-error">Xoá</button>
         </div>
       </div>
 

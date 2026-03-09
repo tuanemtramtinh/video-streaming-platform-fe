@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminCustomInput } from "../AdminCustomInput";
 import { AdminCustomSelect } from "../AdminCustomSelect";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import FilePondPluginMediaPreview from "filepond-plugin-media-preview";
 import { FilePond, registerPlugin } from "react-filepond";
 import { Editor } from "@tinymce/tinymce-react";
-import { LessonType } from "@/types/lesson.type";
+import { LessonType, type ILesson } from "@/types/lesson.type";
 import { useCreateLesson } from "@/hooks/useCreateLesson";
 import { useNavigate, useParams } from "react-router";
 import Loading from "../Loading";
 import { useGetLessonDetail } from "@/hooks/useGetLessonDetail";
+import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.css";
+import "filepond/dist/filepond.min.css";
+import { useUpdateLesson } from "@/hooks/useUpdateLesson";
+import { AdminDeleteLessonModal } from "@/components/AdminDeleteLessonModal";
 
 registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview,
   FilePondPluginFileValidateType,
+  FilePondPluginMediaPreview,
 );
 
 export const LessonAdminGeneralInformation = ({
@@ -23,15 +29,16 @@ export const LessonAdminGeneralInformation = ({
 }: {
   isEdit?: boolean;
 }) => {
-  const { sectionId, lessonId } = useParams();
+  const { id, sectionId, lessonId } = useParams();
   const navigate = useNavigate();
 
   const { mutate: createLesson, isPending } = useCreateLesson();
+  const { mutate: updateLesson, isPending: isPendingUpdate } =
+    useUpdateLesson();
 
-  const { data } = useGetLessonDetail(lessonId);
+  const { data, isSuccess } = useGetLessonDetail(lessonId);
 
-  console.log(data);
-
+  const [initialData, setInitialData] = useState<ILesson | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [pondFiles, setPondFiles] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,6 +46,8 @@ export const LessonAdminGeneralInformation = ({
   const [title, setTitle] = useState("");
   const [orderIndex, setOrderIndex] = useState("0");
   const [desc, setDesc] = useState("");
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const handleCreate = () => {
     const data = {
@@ -50,21 +59,87 @@ export const LessonAdminGeneralInformation = ({
       orderIndex: Number(orderIndex),
     };
 
-    createLesson(data);
-
-    navigate(`/admin/courses/47/sections/${sectionId}/lessons`);
+    createLesson(data, {
+      onSuccess: () => {
+        navigate(`/admin/courses/${id}/sections/${sectionId}/lessons`);
+      },
+    });
   };
+
+  const handleUpdate = () => {
+    if (!initialData) return;
+
+    const updatedData: Partial<ILesson> = {};
+
+    if (title && initialData.title !== title) {
+      updatedData.title = title;
+    }
+
+    if (orderIndex && String(initialData.orderIndex) !== orderIndex) {
+      updatedData.orderIndex = Number(orderIndex);
+    }
+
+    if (courseType && initialData.lessonType !== courseType) {
+      updatedData.lessonType = courseType;
+    }
+
+    if (desc && initialData.contentText !== desc) {
+      updatedData.contentText = desc;
+    }
+
+    updateLesson({
+      lessonId: lessonId as string,
+      title: updatedData.title,
+      orderIndex: updatedData.orderIndex
+        ? Number(updatedData.orderIndex)
+        : undefined,
+      lessonType: updatedData.lessonType,
+      contentText: updatedData.contentText,
+    });
+  };
+
+  const handleDelete = () => {
+    setIsOpenDelete(true);
+  };
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setInitialData(data);
+      setTitle(data.title);
+      setOrderIndex(String(data.orderIndex));
+      setCourseType(data.lessonType);
+      setDesc(data.contentText);
+    }
+  }, [data, isSuccess]);
 
   return (
     <div>
-      {isPending && <Loading />}
+      {(isPending || isPendingUpdate || isLoadingDelete) && <Loading />}
+      {isEdit && lessonId && (
+        <AdminDeleteLessonModal
+          id={lessonId}
+          isOpen={isOpenDelete}
+          onClose={() => setIsOpenDelete(false)}
+          setLoading={setIsLoadingDelete}
+        />
+      )}
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Đăng tải bài học</h2>
         <div className="flex gap-2">
           {isEdit && (
-            <button className="btn btn-success text-white">Lưu</button>
+            <button
+              className="btn btn-success text-white"
+              onClick={handleUpdate}
+            >
+              Lưu
+            </button>
           )}
-          {isEdit && <button className="btn btn-error text-white">Xoá</button>}
+          {isEdit && (
+            <button className="btn btn-error text-white" onClick={handleDelete}>
+              Xoá
+            </button>
+          )}
           {!isEdit && (
             <button className="btn btn-info text-white" onClick={handleCreate}>
               Tạo bài học mới
@@ -112,6 +187,7 @@ export const LessonAdminGeneralInformation = ({
               "video/mp4",
               "video/quicktime", // MOV
             ]}
+            // allowVideoPreview = true
             onupdatefiles={(items) => {
               setPondFiles(items);
             }}
