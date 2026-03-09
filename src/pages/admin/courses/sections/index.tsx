@@ -4,29 +4,28 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 import { DataTable } from "@/components/DataTable";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useGetSectionsByCourseId } from "@/hooks/useGetSectionsByCourseId";
 
 export default function AdminCourseSectionPage() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const data: ISectionRow[] = [
-    {
-      id: 1,
-      orderIndex: 1,
-      title: "The Solid State",
-      createdAt: "15/12/2025",
-      status: "Public",
-    },
-    {
-      id: 2,
-      orderIndex: 2,
-      title: "Quantum Physics",
-      createdAt: "16/12/2025",
-      status: "Draft",
-    },
-  ];
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = Number(searchParams.get("page") ?? 1);
+  const limit = Number(searchParams.get("limit") ?? 10);
+
+  const { data } = useGetSectionsByCourseId(Number(id), page, limit);
+
+  const rows: ISectionRow[] =
+    data?.data?.map((section) => ({
+      id: section.id,
+      orderIndex: section.orderIndex,
+      title: section.title,
+      status: section.status,
+    })) ?? [];
 
   const columns: ColumnDef<ISectionRow>[] = [
     {
@@ -36,10 +35,6 @@ export default function AdminCourseSectionPage() {
     {
       accessorKey: "title",
       header: "Tiêu đề",
-    },
-    {
-      accessorKey: "createdAt",
-      header: "Ngày đăng",
     },
     {
       accessorKey: "status",
@@ -70,9 +65,25 @@ export default function AdminCourseSectionPage() {
         <div className="flex-1 overflow-x-auto">
           <DataTable
             columns={columns}
-            data={data}
-            onRowClick={() => {
-              navigate(`/admin/courses/${id}/sections/1`);
+            data={rows}
+            pagination={{
+              pageIndex: page - 1,
+              pageSize: limit,
+            }}
+            pageCount={data?.meta.lastPage ?? 0}
+            onPaginationChange={(updater) => {
+              const next =
+                typeof updater === "function"
+                  ? updater({ pageIndex: page - 1, pageSize: limit })
+                  : updater;
+
+              setSearchParams({
+                page: String(next.pageIndex + 1),
+                limit: String(next.pageSize),
+              });
+            }}
+            onRowClick={(row) => {
+              navigate(`/admin/courses/${id}/sections/${row.id}`);
             }}
           />
         </div>

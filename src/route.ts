@@ -26,6 +26,7 @@ import AdminSectionDetailsLayout from "@/layouts/AdminSectionDetailsLayout";
 import AdminLessonsPage from "./pages/admin/courses/lessons";
 import AdminNewLessonPage from "./pages/admin/courses/lessons/new";
 import AdminLessonDetailPage from "./pages/admin/courses/lessons/details";
+import SectionsPage from "./pages/client/sections/details";
 
 const router = createBrowserRouter([
   {
@@ -35,8 +36,20 @@ const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "login", Component: LoginPage },
       { path: "register", Component: RegisterPage },
-      { path: "courses", Component: CoursePage },
-      { path: "courses/:id", Component: CourseDetailPage },
+      {
+        path: "courses",
+        children: [
+          { index: true, Component: CoursePage },
+          {
+            path: ":id",
+            Component: CourseDetailPage,
+          },
+          {
+            path: ":id/sections/:sectionId/lessons/:lessonId",
+            Component: SectionsPage,
+          },
+        ],
+      },
     ],
   },
 

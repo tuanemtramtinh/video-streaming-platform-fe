@@ -4,6 +4,7 @@ export const AdminCustomInput = ({
   required,
   style,
   value,
+  type = "text",
   setValue,
 }: {
   label: string;
@@ -11,6 +12,7 @@ export const AdminCustomInput = ({
   required?: boolean;
   style?: string;
   value?: string;
+  type?: string;
   setValue?: (value: string) => void;
 }) => {
   return (
@@ -21,7 +23,7 @@ export const AdminCustomInput = ({
         {label} {required && <span className="text-error">*</span>}
       </label>
       <input
-        type="text"
+        type={type}
         id={label}
         placeholder={placeholder}
         className="input input-ghost w-full p-0 focus-within:outline-none"

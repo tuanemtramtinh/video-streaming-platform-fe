@@ -20,11 +20,11 @@ export default function AdminSectionDetailsLayout() {
           </h2>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-error">Xoá</button>
+          <button className="btn btn-info">Lưu</button>
           <button className="btn border-border bg-white">
             Chuyển sang Nháp
           </button>
-          <button className="btn btn-info">Lưu</button>
+          <button className="btn btn-error">Xoá</button>
         </div>
       </div>
 

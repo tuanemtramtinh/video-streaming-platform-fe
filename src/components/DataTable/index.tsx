@@ -1,26 +1,51 @@
 import {
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
+  type OnChangeFn,
+  type PaginationState,
 } from "@tanstack/react-table";
 
 type DataTableProps<T> = {
   columns: ColumnDef<T>[];
   data: T[];
+
+  pagination: PaginationState;
+
+  pageCount: number;
+
+  onPaginationChange: OnChangeFn<PaginationState>;
+
   onRowClick?: (row: T) => void;
 };
 
-export function DataTable<T>({ columns, data, onRowClick }: DataTableProps<T>) {
+export function DataTable<T>({
+  columns,
+  data,
+  pagination,
+  onPaginationChange,
+  pageCount,
+  onRowClick,
+}: DataTableProps<T>) {
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
+
+    state: {
+      pagination,
+    },
+
+    onPaginationChange,
+
+    manualPagination: true,
+
+    pageCount,
+
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (

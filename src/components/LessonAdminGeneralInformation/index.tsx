@@ -6,6 +6,11 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import { FilePond, registerPlugin } from "react-filepond";
 import { Editor } from "@tinymce/tinymce-react";
+import { LessonType } from "@/types/lesson.type";
+import { useCreateLesson } from "@/hooks/useCreateLesson";
+import { useNavigate, useParams } from "react-router";
+import Loading from "../Loading";
+import { useGetLessonDetail } from "@/hooks/useGetLessonDetail";
 
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -18,13 +23,41 @@ export const LessonAdminGeneralInformation = ({
 }: {
   isEdit?: boolean;
 }) => {
+  const { sectionId, lessonId } = useParams();
+  const navigate = useNavigate();
+
+  const { mutate: createLesson, isPending } = useCreateLesson();
+
+  const { data } = useGetLessonDetail(lessonId);
+
+  console.log(data);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [pondFiles, setPondFiles] = useState<any[]>([]);
-  const [courseType, setCourseType] = useState("frontend");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [courseType, setCourseType] = useState<any>(LessonType.DOCUMENT);
+  const [title, setTitle] = useState("");
+  const [orderIndex, setOrderIndex] = useState("0");
   const [desc, setDesc] = useState("");
+
+  const handleCreate = () => {
+    const data = {
+      sectionId: Number(sectionId),
+      title,
+      contentUrl: "",
+      contentText: desc,
+      lessonType: courseType,
+      orderIndex: Number(orderIndex),
+    };
+
+    createLesson(data);
+
+    navigate(`/admin/courses/47/sections/${sectionId}/lessons`);
+  };
 
   return (
     <div>
+      {isPending && <Loading />}
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Đăng tải bài học</h2>
         <div className="flex gap-2">
@@ -33,7 +66,9 @@ export const LessonAdminGeneralInformation = ({
           )}
           {isEdit && <button className="btn btn-error text-white">Xoá</button>}
           {!isEdit && (
-            <button className="btn btn-info text-white">Tạo bài học mới</button>
+            <button className="btn btn-info text-white" onClick={handleCreate}>
+              Tạo bài học mới
+            </button>
           )}
         </div>
       </div>
@@ -43,19 +78,24 @@ export const LessonAdminGeneralInformation = ({
           label="Tiêu đề"
           placeholder="Tiêu đề..."
           required={true}
+          value={title}
+          setValue={setTitle}
         />
         <AdminCustomInput
           label="Thứ tự bài học"
           placeholder="Thứ tự bài học..."
           required={true}
+          value={orderIndex}
+          setValue={setOrderIndex}
         />
         <AdminCustomSelect
           label="Loại khoá học"
           value={courseType}
           setValue={setCourseType}
           options={[
-            { label: "Frontend", value: "frontend" },
-            { label: "Backend", value: "backend" },
+            { label: "Video", value: LessonType.VIDEO },
+            { label: "Document", value: LessonType.DOCUMENT },
+            { label: "Quiz", value: LessonType.QUIZ },
           ]}
           required={true}
         />
