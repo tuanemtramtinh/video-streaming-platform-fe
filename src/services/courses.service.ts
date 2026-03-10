@@ -120,9 +120,19 @@ export const updateCourseApi = async ({
     formData.append("thumbnail", thumbnail);
   }
 
-  return api.patch(`/courses/${id}`, formData);
+  return (await api.patch(`/courses/${id}`, formData)).data;
 };
 
 export const deleteCourseApi = async ({ id }: { id: string }) => {
-  return api.delete(`/courses/${id}`);
+  return await api.delete(`/courses/${id}`);
+};
+
+export const searchCourse = async (search: string) => {
+  return (
+    await api.get(`/courses/search`, {
+      params: {
+        name: search,
+      },
+    })
+  ).data as ICourseResponse;
 };
