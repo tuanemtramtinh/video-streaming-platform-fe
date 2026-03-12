@@ -16,6 +16,7 @@ import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.css";
 import "filepond/dist/filepond.min.css";
 import { useUpdateLesson } from "@/hooks/useUpdateLesson";
 import { AdminDeleteLessonModal } from "@/components/AdminDeleteLessonModal";
+import { toast } from "react-toastify";
 
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -50,6 +51,11 @@ export const LessonAdminGeneralInformation = ({
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const handleCreate = () => {
+    if (title === "" || desc === "" || orderIndex === "") {
+      toast.error("Vui lòng nhập đầy đủ các trường");
+      return;
+    }
+
     const data = {
       sectionId: Number(sectionId),
       title,

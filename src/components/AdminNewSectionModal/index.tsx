@@ -3,6 +3,7 @@ import { useCreateSection } from "@/hooks/useCreateSection";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import Loading from "../Loading";
+import { toast } from "react-toastify";
 
 interface Props {
   isOpen: boolean;
@@ -20,6 +21,12 @@ export const AdminNewSectionModal = ({ isOpen, onClose }: Props) => {
   const { mutate: createSection, isPending } = useCreateSection(Number(id));
 
   const handleCreate = () => {
+    if (orderIndex === "" || title === "") {
+      onClose();
+      toast.error("Vui lòng nhập đầy đủ các trường");
+      return;
+    }
+
     createSection({
       courseId: Number(id),
       title,
