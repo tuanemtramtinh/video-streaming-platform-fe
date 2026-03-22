@@ -62,3 +62,12 @@ export const updateSection = async ({
 
   return res.data as ISection;
 };
+
+export const deleteSectionApi = async ({
+  sectionId,
+}: {
+  sectionId: string;
+}) => {
+  const res = await api.delete(`/sections/${sectionId}`);
+  return res.data;
+};

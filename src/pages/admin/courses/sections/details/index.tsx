@@ -1,4 +1,6 @@
 import { AdminCustomInput } from "@/components/AdminCustomInput";
+import { AdminDeleteSectionModal } from "@/components/AdminDeleteSectionModal";
+import Loading from "@/components/Loading";
 import { useGetSectionById } from "@/hooks/useGetSectionById";
 import { useUpdateSection } from "@/hooks/useUpdateSection";
 import { useSectionStore } from "@/stores/useSectionStore";
@@ -15,6 +17,8 @@ export default function AdminCourseSectionDetailsPage() {
   const [initialData, setInitialData] = useState<ISection | null>(null);
   const [orderIndex, setOrderIndex] = useState("0");
   const [title, setTitle] = useState("");
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const { data, isSuccess } = useGetSectionById(sectionId as string);
 
@@ -46,10 +50,19 @@ export default function AdminCourseSectionDetailsPage() {
       setInitialData(data);
       setSection(data);
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, data, setSection]);
 
   return (
     <div>
+      {sectionId && (
+        <AdminDeleteSectionModal
+          sectionId={sectionId}
+          isOpen={isOpenDelete}
+          onClose={() => setIsOpenDelete(false)}
+          setLoading={setIsLoadingDelete}
+        />
+      )}
+      {isLoadingDelete && <Loading />}
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-color-primary text-lg">Chi tiết chương</h2>
         <div className="flex gap-2">
@@ -59,7 +72,12 @@ export default function AdminCourseSectionDetailsPage() {
           <button className="btn border-border bg-white">
             Chuyển sang Nháp
           </button>
-          <button className="btn btn-error">Xoá</button>
+          <button
+            className="btn btn-error"
+            onClick={() => setIsOpenDelete(true)}
+          >
+            Xoá
+          </button>
         </div>
       </div>
 
