@@ -8,11 +8,10 @@ import {
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
-import { useGetCourseDetailWithSectionsAndLessons } from "@/hooks/usegetCourseDetailWithSectionsAndLessons";
+import { useGetCourseDetailWithSectionsAndLessons } from "@/hooks/useGetCourseDetailWithSectionsAndLessons";
 import { useParams } from "react-router";
 import { type ILesson, LessonType } from "@/types/lesson.type";
 import { useEffect, useState } from "react";
-import { type ISection } from "@/types/section.type";
 
 export default function SectionsPage() {
   const { id, sectionId, lessonId } = useParams();
