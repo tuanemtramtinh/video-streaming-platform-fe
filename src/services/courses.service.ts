@@ -49,7 +49,7 @@ export const getCourseByInstructorIdApi = async ({
     },
   });
 
-  return res.data;
+  return res.data as ICourseResponse | undefined;
 };
 
 export const getCourseDetailApi = async ({ id }: { id: string | number }) => {

@@ -1,4 +1,5 @@
 import Pagination from "@/components/Pagination";
+import { AdminCourseCardSkeleton } from "@/components/Skeletons/AdminCourseCardSkeleton";
 import { useGetCourseByInstructor } from "@/hooks/useGetCourseByInstructor";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Search } from "lucide-react";
@@ -58,7 +59,7 @@ export default function AdminCoursePage() {
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 9;
 
-  const { data, isLoading } = useGetCourseByInstructor(
+  const { data, isPending } = useGetCourseByInstructor(
     user?.id as string,
     pageFromUrl,
     limit,
@@ -90,7 +91,11 @@ export default function AdminCoursePage() {
       </label>
       <div className="flex flex-1 flex-col gap-6">
         <div className="grid flex-1 grid-cols-3 content-start gap-3">
-          {data ? (
+          {isPending ? (
+            Array.from({ length: limit }, (_, i) => (
+              <AdminCourseCardSkeleton key={i} />
+            ))
+          ) : data?.data?.length ? (
             data.data.map((course) => (
               <Card
                 key={course.id}

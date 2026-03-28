@@ -15,6 +15,14 @@ export const LessonStatus = {
 
 export type LessonStatus = (typeof LessonStatus)[keyof typeof LessonStatus];
 
+export const VideoStatus = {
+  PENDING: "pending",
+  PROCESS: "processing",
+  READY: "ready",
+  FAILED: "failed",
+};
+
+export type VideoStatus = (typeof VideoStatus)[keyof typeof VideoStatus];
 export interface ILessonRow {
   id: number;
   orderIndex: number;
@@ -32,6 +40,7 @@ export interface ILesson {
   lessonType: LessonType;
   orderIndex: number;
   status: LessonStatus;
+  videoStatus: VideoStatus;
 }
 
 export interface ILessonResponse {

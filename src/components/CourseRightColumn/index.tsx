@@ -2,6 +2,7 @@ import { useGetCourse } from "@/hooks/useGetCourse";
 import { CourseCardItem } from "../CourseCardItem";
 import { useSearchParams } from "react-router";
 import Pagination from "@/components/Pagination";
+import { CourseCardItemSkeleton } from "@/components/Skeletons/CourseCardItemSkeleton";
 
 export const CourseRightColumn = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -9,9 +10,7 @@ export const CourseRightColumn = () => {
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 9;
 
-  const { data, isLoading } = useGetCourse(pageFromUrl, limit);
-
-  console.log(data);
+  const { data, isPending } = useGetCourse(pageFromUrl, limit);
 
   const handleChangePage = (page: number) => {
     setSearchParams({
@@ -25,16 +24,26 @@ export const CourseRightColumn = () => {
   return (
     <div className="">
       <div className="mb-6 grid grid-cols-3 gap-5">
-        {data?.data.map((course) => (
-          <CourseCardItem
-            key={course.id}
-            id={course.id}
-            title={course.title}
-            author={`${course.instructor.lastName} ${course.instructor.firstName}`}
-            price={`${course.price.toLocaleString()} VND`}
-            thumbnailUrl={course.thumbnailUrl}
-          />
-        ))}
+        {isPending ? (
+          Array.from({ length: limit }, (_, i) => (
+            <CourseCardItemSkeleton key={i} />
+          ))
+        ) : data?.data?.length ? (
+          data.data.map((course) => (
+            <CourseCardItem
+              key={course.id}
+              id={course.id}
+              title={course.title}
+              author={`${course.instructor.lastName} ${course.instructor.firstName}`}
+              price={`${course.price.toLocaleString()} VND`}
+              thumbnailUrl={course.thumbnailUrl}
+            />
+          ))
+        ) : (
+          <div className="text-text-secondary col-span-3 py-8 text-center">
+            Chưa có khoá học nào
+          </div>
+        )}
       </div>
 
       <div className="flex w-full justify-center">

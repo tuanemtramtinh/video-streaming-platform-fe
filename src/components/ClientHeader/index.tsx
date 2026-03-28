@@ -1,4 +1,4 @@
-import { Bell, LogOut, Search, ShoppingCart } from "lucide-react";
+import { Bell, Gauge, LogOut, Search, ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
 import webLogo from "../../assets/logo.svg";
 import { Avatar } from "@/components/Avatar";
@@ -129,16 +129,37 @@ export const ClientHeader = () => {
           )}
 
           {user && (
-            <Avatar
-              width="w-10"
-              url={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}`}
-            />
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle"
+              >
+                <Avatar
+                  width="w-10"
+                  url={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}`}
+                />
+              </div>
+              <ul
+                tabIndex={-1}
+                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+              >
+                <li>
+                  <Link to={"/admin"} className="inline-flex items-center">
+                    <Gauge />
+                    <span>Trang Quản Lý</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
           )}
 
           {user && (
-            <button className="btn btn-neutral" onClick={handleLogout}>
-              <LogOut />
-            </button>
+            <div className="tooltip tooltip-bottom" data-tip="Đăng Xuất">
+              <button className="btn btn-neutral" onClick={handleLogout}>
+                <LogOut />
+              </button>
+            </div>
           )}
         </div>
       </header>

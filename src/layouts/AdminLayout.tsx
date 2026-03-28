@@ -3,6 +3,8 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import {
   Book,
   Gauge,
+  House,
+  LogOut,
   Menu,
   PanelLeftOpen,
   PanelRightOpen,
@@ -11,10 +13,17 @@ import {
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import LogoLight from "@/assets/logo-light.svg";
+import { useLogout } from "@/hooks/useLogout";
 
 export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const user = useAuthStore((state) => state.user);
+  const refreshToken = useAuthStore((state) => state.refreshToken) as string;
+  const { mutate: logout } = useLogout();
+  const handleLogout = () => {
+    logout({ refreshToken });
+  };
+
   return (
     <div className="drawer lg:drawer-open">
       <input
@@ -93,9 +102,26 @@ export default function AdminLayout() {
                 Chào, {user?.firstName}
               </span>
             </div>
-            <button className="btn btn-ghost btn-sm is-drawer-close:hidden">
-              <Menu />
-            </button>
+            <div className="dropdown dropdown-top dropdown-end is-drawer-close:hidden">
+              <div tabIndex={0} role="button" className="btn btn-ghost m-1">
+                <Menu />
+              </div>
+              <ul
+                tabIndex={-1}
+                className="dropdown-content menu bg-base-100 text-color-primary rounded-box z-1 w-52 p-2 shadow-sm"
+              >
+                <li>
+                  <Link to={"/"} className="inline-flex items-center">
+                    <House size={16} /> Trang Chủ
+                  </Link>
+                </li>
+                <li>
+                  <div onClick={handleLogout} className="flex items-center">
+                    <LogOut size={16} /> Đăng Xuất
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
