@@ -5,11 +5,13 @@ export const AdminCustomInput = ({
   style,
   value,
   type = "text",
+  disabled = false,
   setValue,
 }: {
   label: string;
   placeholder: string;
   required?: boolean;
+  disabled?: boolean;
   style?: string;
   value?: string;
   type?: string;
@@ -26,6 +28,7 @@ export const AdminCustomInput = ({
         type={type}
         id={label}
         placeholder={placeholder}
+        disabled={disabled}
         className="input input-ghost w-full p-0 focus-within:outline-none"
         required
         value={value}

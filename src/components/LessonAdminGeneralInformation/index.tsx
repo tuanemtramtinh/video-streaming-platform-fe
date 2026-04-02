@@ -14,7 +14,12 @@ import { createMultipartUppy } from "@/utils/createVideoUppy";
 import Dashboard from "@uppy/react/dashboard";
 import "@uppy/core/css/style.min.css";
 import "@uppy/dashboard/css/style.min.css";
-
+import { useProcessVideo } from "@/hooks/useProcessVideo";
+import { MediaPlayer, MediaProvider } from "@vidstack/react";
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout,
+} from "@vidstack/react/player/layouts/default";
 export const LessonAdminGeneralInformation = ({
   isEdit = false,
 }: {
@@ -26,6 +31,7 @@ export const LessonAdminGeneralInformation = ({
   const { mutate: createLesson, isPending } = useCreateLesson();
   const { mutate: updateLesson, isPending: isPendingUpdate } =
     useUpdateLesson();
+  const { mutate: processVideo } = useProcessVideo();
 
   const { data, isSuccess } = useGetLessonDetail(lessonId);
 
@@ -40,29 +46,49 @@ export const LessonAdminGeneralInformation = ({
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const handleCreate = () => {
+  const isOpenDashboard = !isEdit || (isEdit && data && !data.contentUrl);
+
+  const handleCreate = async () => {
     if (title === "" || desc === "" || orderIndex === "") {
       toast.error("Vui lòng nhập đầy đủ các trường");
       return;
     }
 
-    const data = {
-      sectionId: Number(sectionId),
-      title,
-      contentUrl: "",
-      contentText: desc,
-      lessonType: courseType,
-      orderIndex: Number(orderIndex),
-    };
+    const result = await uppy.upload();
 
-    createLesson(data, {
-      onSuccess: () => {
-        navigate(`/admin/courses/${id}/sections/${sectionId}/lessons`);
+    if (
+      !result ||
+      !result.failed ||
+      !result.successful ||
+      result.failed.length > 0 ||
+      result.successful.length === 0
+    ) {
+      const errorMessage = result?.failed?.[0]?.error ?? "Tải video thất bại";
+      toast.error(errorMessage);
+      return;
+    }
+
+    const contentUrl = result.successful[0].uploadURL ?? "";
+
+    createLesson(
+      {
+        sectionId: Number(sectionId),
+        title,
+        contentUrl,
+        contentText: desc,
+        lessonType: courseType,
+        orderIndex: Number(orderIndex),
       },
-    });
+      {
+        onSuccess: (data) => {
+          processVideo({ lessonId: data.id });
+          navigate(`/admin/courses/${id}/sections/${sectionId}/lessons`);
+        },
+      },
+    );
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!initialData) return;
 
     const updatedData: Partial<ILesson> = {};
@@ -83,6 +109,27 @@ export const LessonAdminGeneralInformation = ({
       updatedData.contentText = desc;
     }
 
+    let contentUrl = undefined;
+    if (isOpenDashboard) {
+      const result = await uppy.upload();
+
+      if (
+        !result ||
+        !result.failed ||
+        !result.successful ||
+        result.failed.length > 0 ||
+        result.successful.length === 0
+      ) {
+        const errorMessage = result?.failed?.[0]?.error ?? "Tải video thất bại";
+        toast.error(errorMessage);
+        return;
+      }
+
+      contentUrl = result.successful[0].uploadURL ?? "";
+    }
+
+    updatedData.contentUrl = contentUrl;
+
     updateLesson({
       lessonId: lessonId as string,
       title: updatedData.title,
@@ -91,6 +138,7 @@ export const LessonAdminGeneralInformation = ({
         : undefined,
       lessonType: updatedData.lessonType,
       contentText: updatedData.contentText,
+      contentUrl: updatedData.contentUrl,
     });
   };
 
@@ -127,17 +175,26 @@ export const LessonAdminGeneralInformation = ({
             <button
               className="btn btn-success text-white"
               onClick={handleUpdate}
+              disabled={isPendingUpdate}
             >
               Lưu
             </button>
           )}
           {isEdit && (
-            <button className="btn btn-error text-white" onClick={handleDelete}>
+            <button
+              className="btn btn-error text-white"
+              disabled={isPendingUpdate}
+              onClick={handleDelete}
+            >
               Xoá
             </button>
           )}
           {!isEdit && (
-            <button className="btn btn-info text-white" onClick={handleCreate}>
+            <button
+              className="btn btn-info text-white"
+              disabled={isPending}
+              onClick={handleCreate}
+            >
               Tạo bài học mới
             </button>
           )}
@@ -151,6 +208,7 @@ export const LessonAdminGeneralInformation = ({
           required={true}
           value={title}
           setValue={setTitle}
+          disabled={isPending || isPendingUpdate}
         />
         <AdminCustomInput
           label="Thứ tự bài học"
@@ -158,6 +216,7 @@ export const LessonAdminGeneralInformation = ({
           required={true}
           value={orderIndex}
           setValue={setOrderIndex}
+          disabled={isPending || isPendingUpdate}
         />
         <AdminCustomSelect
           label="Loại khoá học"
@@ -168,6 +227,7 @@ export const LessonAdminGeneralInformation = ({
             { label: "Document", value: LessonType.DOCUMENT },
             { label: "Quiz", value: LessonType.QUIZ },
           ]}
+          disabled={isPending || isPendingUpdate}
           required={true}
         />
         <div className="">
@@ -176,13 +236,24 @@ export const LessonAdminGeneralInformation = ({
           </h2>
 
           <div className="min-w-0">
-            <p className="text-text-secondary mb-2 text-sm">Tải lên</p>
-            <Dashboard
-              uppy={uppy}
-              width={"100%"}
-              height={400}
-              hideUploadButton
-            />
+            {isOpenDashboard ? (
+              <>
+                <p className="text-text-secondary mb-2 text-sm">Tải lên</p>
+                <Dashboard
+                  uppy={uppy}
+                  width={"100%"}
+                  height={400}
+                  hideUploadButton
+                />
+              </>
+            ) : (
+              <div>
+                <MediaPlayer title="" crossOrigin src={data?.contentUrl}>
+                  <MediaProvider />
+                  <DefaultVideoLayout icons={defaultLayoutIcons} />
+                </MediaPlayer>
+              </div>
+            )}
           </div>
           {/* Cột "Xem trước" (video player) tạm tắt — bật lại cùng state videoPlaybackUrl + grid 2 cột */}
         </div>
@@ -194,6 +265,7 @@ export const LessonAdminGeneralInformation = ({
             apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
             value={desc}
             onEditorChange={(newValue) => setDesc(newValue)}
+            disabled={isPending || isPendingUpdate}
             init={{
               plugins: ["lists", "link", "image", "table", "code"],
 

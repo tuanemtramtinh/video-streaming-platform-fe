@@ -7,8 +7,7 @@ export const useCreateLesson = () => {
 
   return useMutation({
     mutationFn: createLesson,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       toast.success("Tạo bài học thành công");
       queryClient.invalidateQueries({ queryKey: ["lessons"] });
     },

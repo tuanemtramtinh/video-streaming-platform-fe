@@ -1,9 +1,15 @@
 import Uppy from "@uppy/core";
 import AwsS3 from "@uppy/aws-s3";
+import api from "@/lib/axios";
 
 const restrictions = {
   maxNumberOfFiles: 1,
-  allowedFileTypes: ["video/mp4", "video/quicktime", "video/webm"],
+  allowedFileTypes: [
+    "video/mp4",
+    "video/quicktime",
+    "video/webm",
+    "video/x-matroska",
+  ],
 };
 
 export function createSingleUppy() {
@@ -18,48 +24,46 @@ export function createSingleUppy() {
   });
 }
 
-// Chỉ có multipart handlers — không có shouldUseMultipart
-// Uppy sẽ tự dùng multipart cho tất cả file
 export function createMultipartUppy() {
   return new Uppy({ autoProceed: false, restrictions }).use(AwsS3, {
+    shouldUseMultipart: true,
+
     async createMultipartUpload(file) {
-      const res = await fetch("/api/s3/multipart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      console.log("hello");
+      console.log(file.name);
+      console.log(file.type);
+      const res = await api.post(`/lessons/multipart-upload/start`, {
+        fileName: file.name,
+        fileType: file.type,
       });
-      return res.json();
+      const { uploadId, videoKey } = res.data;
+      return { uploadId, key: videoKey };
     },
 
     async signPart(_file, { uploadId, key, partNumber }) {
-      const res = await fetch(
-        `/api/s3/multipart/${uploadId}/${partNumber}?key=${encodeURIComponent(key)}`,
-      );
-      return res.json();
-    },
-
-    async listParts(_file, { uploadId, key }) {
-      const res = await fetch(
-        `/api/s3/multipart/${uploadId}?key=${encodeURIComponent(key)}`,
-      );
-      return res.json();
+      const res = await api.post(`/lessons/multipart-upload/sign-part`, {
+        uploadId,
+        videoKey: key,
+        partNumber,
+      });
+      return { url: res.data.url };
     },
 
     async completeMultipartUpload(_file, { uploadId, key, parts }) {
-      const res = await fetch(`/api/s3/multipart/${uploadId}/complete`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key, parts }),
+      const res = await api.post(`/lessons/multipart-upload/complete`, {
+        uploadId,
+        videoKey: key,
+        parts,
       });
-      return res.json();
+      return { location: res.data.videoUrl };
     },
 
-    async abortMultipartUpload(_file, { uploadId, key }) {
-      await fetch(`/api/s3/multipart/${uploadId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key }),
-      });
+    // Backend has no listParts / abortMultipartUpload endpoints.
+    // These stubs satisfy the type requirement.
+    async listParts() {
+      return [];
     },
+
+    async abortMultipartUpload() {},
   });
 }

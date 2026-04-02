@@ -5,6 +5,7 @@ export const AdminCustomSelect = ({
   required,
   style,
   value,
+  disabled = false,
   setValue,
   options,
 }: {
@@ -12,6 +13,7 @@ export const AdminCustomSelect = ({
   required?: boolean;
   style?: string;
   value?: string;
+  disabled?: boolean;
   setValue?: (value: string) => void;
   options: IOption[];
 }) => {
@@ -28,6 +30,7 @@ export const AdminCustomSelect = ({
         className="select select-ghost w-full p-0 focus-within:outline-none"
         value={value}
         onChange={(e) => setValue?.(e.target.value)}
+        disabled={disabled}
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

@@ -61,7 +61,10 @@ export default function SectionsPage() {
 
         <div className="flex items-start gap-10">
           <div className="flex-8">
-            {lesson && lesson.lessonType === LessonType.VIDEO && (
+            {lesson &&
+            lesson.lessonType === LessonType.VIDEO &&
+            lesson.videoStatus !== VideoStatus.PENDING &&
+            lesson.videoStatus !== VideoStatus.PROCESS ? (
               <div className="mb-6 aspect-video w-full overflow-hidden rounded-xl">
                 <MediaPlayer
                   title=""
@@ -83,6 +86,11 @@ export default function SectionsPage() {
                   </MediaProvider>
                   <DefaultVideoLayout icons={defaultLayoutIcons} />
                 </MediaPlayer>
+              </div>
+            ) : (
+              <div className="mb-6 flex aspect-video w-full flex-col items-center justify-center overflow-hidden rounded-xl border">
+                <div className="loading loading-spinner loading-md"></div>
+                <div>Video is being processed. Please comeback later.</div>
               </div>
             )}
             <div

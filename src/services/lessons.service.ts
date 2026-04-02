@@ -55,24 +55,29 @@ export const updateLesson = async ({
   orderIndex,
   lessonType,
   contentText,
+  contentUrl,
 }: {
   lessonId: string;
   title?: string;
   orderIndex?: number;
   lessonType?: LessonType;
   contentText?: string;
+  contentUrl?: string;
 }) => {
   const body = {
     title,
     orderIndex,
     lessonType,
     contentText,
+    contentUrl,
   };
-
+  console.log("I was here");
   const filteredBody = Object.fromEntries(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(body).filter(([_, v]) => v !== undefined),
   );
+
+  console.log(filteredBody);
 
   const res = await api.patch(`/lessons/${lessonId}`, filteredBody);
 
@@ -81,4 +86,14 @@ export const updateLesson = async ({
 
 export const deleteLesson = async ({ id }: { id: string }) => {
   return api.delete(`/lessons/${id}`);
+};
+
+export const processVideo = async ({
+  lessonId,
+}: {
+  lessonId: number | string;
+}) => {
+  const res = await api.post(`/lessons/${lessonId}/process-video`);
+
+  return res.data;
 };
