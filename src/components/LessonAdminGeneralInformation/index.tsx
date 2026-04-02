@@ -1,29 +1,19 @@
 import { useEffect, useState } from "react";
 import { AdminCustomInput } from "../AdminCustomInput";
 import { AdminCustomSelect } from "../AdminCustomSelect";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import FilePondPluginMediaPreview from "filepond-plugin-media-preview";
-import { FilePond, registerPlugin } from "react-filepond";
 import { Editor } from "@tinymce/tinymce-react";
 import { LessonType, type ILesson } from "@/types/lesson.type";
 import { useCreateLesson } from "@/hooks/useCreateLesson";
 import { useNavigate, useParams } from "react-router";
 import Loading from "../Loading";
 import { useGetLessonDetail } from "@/hooks/useGetLessonDetail";
-import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.css";
-import "filepond/dist/filepond.min.css";
 import { useUpdateLesson } from "@/hooks/useUpdateLesson";
 import { AdminDeleteLessonModal } from "@/components/AdminDeleteLessonModal";
 import { toast } from "react-toastify";
-
-registerPlugin(
-  FilePondPluginImageExifOrientation,
-  FilePondPluginImagePreview,
-  FilePondPluginFileValidateType,
-  FilePondPluginMediaPreview,
-);
+import { createMultipartUppy } from "@/utils/createVideoUppy";
+import Dashboard from "@uppy/react/dashboard";
+import "@uppy/core/css/style.min.css";
+import "@uppy/dashboard/css/style.min.css";
 
 export const LessonAdminGeneralInformation = ({
   isEdit = false,
@@ -39,9 +29,9 @@ export const LessonAdminGeneralInformation = ({
 
   const { data, isSuccess } = useGetLessonDetail(lessonId);
 
+  const [uppy] = useState(() => createMultipartUppy());
+
   const [initialData, setInitialData] = useState<ILesson | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [pondFiles, setPondFiles] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [courseType, setCourseType] = useState<any>(LessonType.DOCUMENT);
   const [title, setTitle] = useState("");
@@ -184,33 +174,17 @@ export const LessonAdminGeneralInformation = ({
           <h2 className="text-text-secondary mb-2 text-sm">
             Tải video bài học <span className="text-error">*</span>
           </h2>
-          <FilePond
-            name="thumbnail"
-            className="filepond tw-filepond"
-            allowMultiple={false}
-            files={pondFiles}
-            acceptedFileTypes={[
-              "video/mp4",
-              "video/quicktime", // MOV
-            ]}
-            // allowVideoPreview = true
-            onupdatefiles={(items) => {
-              setPondFiles(items);
-            }}
-            labelIdle={`
-                 <div class="flex flex-col items-center justify-center gap-2 w-full h-full py-8">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube-icon lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
-                   
-                   <div class="text-base font-semibold text-gray-900">
-                     Drag and drop files, or <span class="filepond--label-action text-blue-500 hover:underline cursor-pointer">Browse</span>
-                   </div>
-                   
-                   <div class="text-sm text-gray-400">
-                     Upload Thumbnail in MOV, MP4.
-                   </div>
-                 </div>
-               `}
-          />
+
+          <div className="min-w-0">
+            <p className="text-text-secondary mb-2 text-sm">Tải lên</p>
+            <Dashboard
+              uppy={uppy}
+              width={"100%"}
+              height={400}
+              hideUploadButton
+            />
+          </div>
+          {/* Cột "Xem trước" (video player) tạm tắt — bật lại cùng state videoPlaybackUrl + grid 2 cột */}
         </div>
         <div>
           <h2 className="text-text-secondary mb-2 text-sm">
