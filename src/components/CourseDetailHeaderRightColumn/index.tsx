@@ -22,17 +22,22 @@ export const CourseDetailHeaderRightColumn = ({
         </div>
       </figure>
       <div className="card-body">
-        <div className="card-title text-color-primary flex justify-between text-xl">
-          <div className="flex items-center">
-            {discount > 0 && <span className="mr-3">{discountPrice} VND</span>}
-            <span
-              className={`${discount > 0 ? "line-through opacity-30" : ""} `}
-            >
+        <div className="flex flex-col gap-2">
+          {discount > 0 && (
+            <span className="badge badge-success w-fit font-semibold">
+              Ưu đãi {discount}%
+            </span>
+          )}
+          <span className="text-color-primary text-2xl font-bold">
+            {discount > 0
+              ? discountPrice.toLocaleString()
+              : price.toLocaleString()}{" "}
+            VND
+          </span>
+          {discount > 0 && (
+            <span className="text-base line-through opacity-40">
               {price.toLocaleString()} VND
             </span>
-          </div>
-          {discount > 0 && (
-            <div className="text-success">Ưu đãi {discount}%</div>
           )}
         </div>
         <div className="card-actions mt-6">

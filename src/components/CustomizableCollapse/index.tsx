@@ -25,10 +25,10 @@ const LessonItem = ({
       to={`/courses/${id}/sections/${sectionId}/lessons/${lesson.id}`}
       className="group flex items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-gray-100"
     >
-      <div className="text-color-primary group-hover:underline">
+      <div className="text-color-primary truncate group-hover:underline">
         {lesson.title}
       </div>
-      <div className="text-text-secondary flex items-center gap-1 group-hover:text-color-primary">
+      <div className="text-text-secondary group-hover:text-color-primary flex items-center gap-1">
         <Icon />
       </div>
     </Link>
@@ -62,13 +62,13 @@ export const CustomizableCollapse = ({ section }: { section: ISection }) => {
         contentStyle={""}
         title={
           <div className="flex items-center justify-between">
-            <h3 className="text-color-primary text-md font-semibold">
+            <h3 className="text-color-primary text-md truncate font-semibold">
               {section.title}
             </h3>
-            <div className="text-text-secondary text-sm font-normal">
+            {/* <div className="text-text-secondary text-sm font-normal">
               <span className="mr-4">5 Bài học</span>
               <span>1 Giờ</span>
-            </div>
+            </div> */}
           </div>
         }
         content={

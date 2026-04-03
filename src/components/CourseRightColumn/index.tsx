@@ -35,7 +35,8 @@ export const CourseRightColumn = () => {
               id={course.id}
               title={course.title}
               author={`${course.instructor.lastName} ${course.instructor.firstName}`}
-              price={`${course.price.toLocaleString()} VND`}
+              price={course.price}
+              discount={course.discount}
               thumbnailUrl={course.thumbnailUrl}
             />
           ))

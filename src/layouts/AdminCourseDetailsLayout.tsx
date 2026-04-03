@@ -9,12 +9,17 @@ export default function AdminCourseDetailsLayout() {
   const { data, isSuccess } = useGetCourseDetail(id);
 
   const setCurrentCourse = useCourseStore((state) => state.setCurrentCourse);
+  const clearCurrentCourse = useCourseStore(
+    (state) => state.clearCurrentCourse,
+  );
 
   useEffect(() => {
     if (data && isSuccess) {
       setCurrentCourse(data);
+    } else {
+      clearCurrentCourse();
     }
-  });
+  }, [data, isSuccess, clearCurrentCourse, setCurrentCourse]);
 
   return (
     <div className="flex h-full flex-col">

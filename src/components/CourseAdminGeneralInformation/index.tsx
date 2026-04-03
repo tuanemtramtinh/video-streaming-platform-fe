@@ -112,7 +112,7 @@ export const CourseAdminGeneralInformation = ({
   };
 
   useEffect(() => {
-    if (currentCourse) {
+    if (isEdit && currentCourse) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialData(currentCourse);
       setCourseName(currentCourse.title);
@@ -128,7 +128,7 @@ export const CourseAdminGeneralInformation = ({
         },
       ]);
     }
-  }, [currentCourse]);
+  }, [isEdit, currentCourse]);
 
   return (
     <div>

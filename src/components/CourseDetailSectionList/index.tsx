@@ -40,7 +40,7 @@ const SectionItem = ({ section }: { section: ISection }) => {
       <input type="checkbox" name="my-accordion-1" />
       <div className="collapse-title font-semibold">
         <div className="flex items-center justify-between">
-          <h3 className="text-color-primary text-lg font-semibold">
+          <h3 className="text-color-primary text-md truncate font-semibold">
             {section.title}
           </h3>
           <div className="text-text-secondary text-sm font-normal">

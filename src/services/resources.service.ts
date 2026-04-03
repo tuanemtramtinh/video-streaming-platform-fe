@@ -29,6 +29,11 @@ export const updateResourceApi = async (
   return res.data;
 };
 
+export const getResourcesByLessonIdApi = async (lessonId: number) => {
+  const res = await api.get(`/resources/lessons/${lessonId}`);
+  return res.data as IResource[];
+};
+
 export const createResourceApi = async (body: {
   courseId: number;
   title: string;

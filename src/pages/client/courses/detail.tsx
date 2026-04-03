@@ -10,7 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { CourseCardItem } from "@/components/CourseCardItem";
 import { useParams } from "react-router";
-import { useGetCourseDetailWithSectionsAndLessons } from "@/hooks/useGetCourseDetailWithSectionsAndLessons";
+import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -29,7 +29,7 @@ export default function CourseDetailPage() {
 
   // console.log(id);
 
-  const { data } = useGetCourseDetailWithSectionsAndLessons(id as string);
+  const { data } = useGetCourseDetail(id as string);
 
   // console.log(data);
 

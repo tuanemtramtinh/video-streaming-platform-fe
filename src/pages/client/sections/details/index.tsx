@@ -8,18 +8,16 @@ import {
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
-import { useGetCourseDetailWithSectionsAndLessons } from "@/hooks/useGetCourseDetailWithSectionsAndLessons";
 import { useNavigate, useParams } from "react-router";
 import { type ILesson, LessonType, VideoStatus } from "@/types/lesson.type";
 import { useEffect, useState } from "react";
+import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 
 export default function SectionsPage() {
   const navigate = useNavigate();
   const { id, sectionId, lessonId } = useParams();
 
-  const { data, isSuccess } = useGetCourseDetailWithSectionsAndLessons(
-    id as string,
-  );
+  const { data, isSuccess } = useGetCourseDetail(id as string);
 
   const [lesson, setLesson] = useState<ILesson | null>(null);
 
@@ -87,11 +85,13 @@ export default function SectionsPage() {
                   <DefaultVideoLayout icons={defaultLayoutIcons} />
                 </MediaPlayer>
               </div>
-            ) : (
+            ) : lesson?.lessonType === LessonType.VIDEO ? (
               <div className="mb-6 flex aspect-video w-full flex-col items-center justify-center overflow-hidden rounded-xl border">
                 <div className="loading loading-spinner loading-md"></div>
                 <div>Video is being processed. Please comeback later.</div>
               </div>
+            ) : (
+              <></>
             )}
             <div
               className="prose max-w-none"

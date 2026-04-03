@@ -6,10 +6,12 @@ type CourseState = {
   currentCourse: ICourseDetail | null;
 
   setCurrentCourse: (course: ICourseDetail) => void;
+  clearCurrentCourse: () => void;
 };
 
 export const useCourseStore = create<CourseState>((set) => ({
   courses: [],
   currentCourse: null,
   setCurrentCourse: (course) => set({ currentCourse: course }),
+  clearCurrentCourse: () => set({ currentCourse: null }),
 }));

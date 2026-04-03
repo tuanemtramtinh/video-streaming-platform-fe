@@ -7,6 +7,7 @@ export interface IResource {
   course: ICourse;
   title: string;
   fileUrl: string;
+  fileType: string;
   createdAt: string;
 }
 

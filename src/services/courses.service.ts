@@ -54,12 +54,6 @@ export const getCourseDetailApi = async ({ id }: { id: string | number }) => {
   return res.data as ICourseDetail | undefined;
 };
 
-export const getCourseDetailWithSectionsAndLessons = async (id: string) => {
-  const res = await api.get(`courses/${id}/sections-lessons`);
-
-  return res.data as ICourseDetail | undefined;
-};
-
 export const createCourseApi = async ({
   title,
   description,

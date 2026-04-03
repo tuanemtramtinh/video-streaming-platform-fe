@@ -1,10 +1,8 @@
 import { useSectionStore } from "@/stores/useSectionStore";
 import { ChevronLeft } from "lucide-react";
-import { NavLink, Outlet, useNavigate, useParams } from "react-router";
+import { Link, NavLink, Outlet, useParams } from "react-router";
 
 export default function AdminSectionDetailsLayout() {
-  const navigate = useNavigate();
-
   const { id } = useParams();
 
   const section = useSectionStore((state) => state.section);
@@ -13,11 +11,12 @@ export default function AdminSectionDetailsLayout() {
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
-          <button className="btn btn-ghost btn-sm">
-            <ChevronLeft
-              onClick={() => navigate(`/admin/courses/${id}/sections`)}
-            />
-          </button>
+          <Link
+            to={`/admin/courses/${id}/sections`}
+            className="btn btn-ghost btn-sm"
+          >
+            <ChevronLeft />
+          </Link>
           <h2 className="ml-2 text-2xl font-semibold">
             {section
               ? `Chương ${section.orderIndex} - ${section.title}`
