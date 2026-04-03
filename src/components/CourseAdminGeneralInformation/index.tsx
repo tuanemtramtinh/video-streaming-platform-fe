@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { useCreateCourse } from "@/hooks/useCreateCourse";
 import { useNavigate, useParams } from "react-router";
-import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 import type { ICourse } from "@/types/course.type";
 import type { UpdateCoursePayload } from "@/services/courses.service";
 import { useUpdateCourse } from "@/hooks/useUpdateCourse";
@@ -33,8 +32,6 @@ export const CourseAdminGeneralInformation = ({
 
   const navigate = useNavigate();
 
-  const setCurrentCourse = useCourseStore((state) => state.setCurrentCourse);
-
   const [initialData, setInitialData] = useState<ICourse | null>(null);
   const [courseName, setCourseName] = useState("");
   const [desc, setDesc] = useState("");
@@ -46,7 +43,7 @@ export const CourseAdminGeneralInformation = ({
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const { data, isSuccess } = useGetCourseDetail(isEdit ? id : undefined);
+  const currentCourse = useCourseStore((state) => state.currentCourse);
 
   const { mutate: createCourse, isPending } = useCreateCourse();
   const { mutate: updateCourse, isPending: isUpdatePending } =
@@ -115,24 +112,23 @@ export const CourseAdminGeneralInformation = ({
   };
 
   useEffect(() => {
-    if (data && isSuccess) {
+    if (currentCourse) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setInitialData(data);
-      setCurrentCourse(data);
-      setCourseName(data.title);
-      setDesc(data.description);
-      setPrice(data.price.toString());
-      setDiscount(data.discount.toString());
+      setInitialData(currentCourse);
+      setCourseName(currentCourse.title);
+      setDesc(currentCourse.description);
+      setPrice(currentCourse.price.toString());
+      setDiscount(currentCourse.discount.toString());
       setPondFiles([
         {
-          source: `${data.thumbnailUrl}?t=${Date.now()}`,
+          source: `${currentCourse.thumbnailUrl}?t=${Date.now()}`,
           options: {
             type: "remote",
           },
         },
       ]);
     }
-  }, [data, isSuccess, setCurrentCourse]);
+  }, [currentCourse]);
 
   return (
     <div>

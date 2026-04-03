@@ -12,26 +12,52 @@ const restrictions = {
   ],
 };
 
-export function createSingleUppy() {
-  return new Uppy({ autoProceed: false, restrictions }).use(AwsS3, {
+const documentRestrictions = {
+  maxNumberOfFiles: 1,
+  allowedFileTypes: [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  ],
+};
+
+export function createDocumentUppy() {
+  return new Uppy({
+    autoProceed: false,
+    restrictions: documentRestrictions,
+  }).use(AwsS3, {
     shouldUseMultipart: false,
     async getUploadParameters(file) {
-      const res = await fetch(
-        `/api/s3/presign?filename=${encodeURIComponent(file.name)}&type=${encodeURIComponent(file.type ?? "")}`,
-      );
-      return res.json();
+      const res = await api.post("/resources/upload", {
+        fileName: file.name,
+        fileType: file.type ?? "",
+      });
+      return { method: "PUT", url: res.data.url };
     },
   });
 }
+
+// export function createSingleUppy() {
+//   return new Uppy({ autoProceed: false, restrictions }).use(AwsS3, {
+//     shouldUseMultipart: false,
+//     async getUploadParameters(file) {
+//       const res = await fetch(
+//         `/api/s3/presign?filename=${encodeURIComponent(file.name)}&type=${encodeURIComponent(file.type ?? "")}`,
+//       );
+//       return res.json();
+//     },
+//   });
+// }
 
 export function createMultipartUppy() {
   return new Uppy({ autoProceed: false, restrictions }).use(AwsS3, {
     shouldUseMultipart: true,
 
     async createMultipartUpload(file) {
-      console.log("hello");
-      console.log(file.name);
-      console.log(file.type);
       const res = await api.post(`/lessons/multipart-upload/start`, {
         fileName: file.name,
         fileType: file.type,

@@ -1,14 +1,14 @@
-import type { ICourse } from "@/types/course.type";
+import type { ICourse, ICourseDetail } from "@/types/course.type";
 import { create } from "zustand";
 
 type CourseState = {
   courses: ICourse[];
-  currentCourse: ICourse | null;
+  currentCourse: ICourseDetail | null;
 
-  setCurrentCourse: (course: ICourse) => void;
+  setCurrentCourse: (course: ICourseDetail) => void;
 };
 
-export const useCourseStore = create<CourseState>((set, get) => ({
+export const useCourseStore = create<CourseState>((set) => ({
   courses: [],
   currentCourse: null,
   setCurrentCourse: (course) => set({ currentCourse: course }),

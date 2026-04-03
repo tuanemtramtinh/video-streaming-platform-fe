@@ -1,13 +1,25 @@
+import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 import { useCourseStore } from "@/stores/useCourseStore";
-import { NavLink, Outlet } from "react-router";
+import { useEffect } from "react";
+import { NavLink, Outlet, useParams } from "react-router";
 
 export default function AdminCourseDetailsLayout() {
-  const currentCourse = useCourseStore((state) => state.currentCourse);
+  const { id } = useParams();
+
+  const { data, isSuccess } = useGetCourseDetail(id);
+
+  const setCurrentCourse = useCourseStore((state) => state.setCurrentCourse);
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setCurrentCourse(data);
+    }
+  });
 
   return (
     <div className="flex h-full flex-col">
       <h2 className="mb-4 text-2xl font-semibold">
-        {currentCourse ? currentCourse.title : "Loading..."}
+        {data ? data.title : "Loading..."}
       </h2>
 
       <div role="tablist" className="tabs tabs-border mb-6">

@@ -1,9 +1,5 @@
 import api from "@/lib/axios";
-import type {
-  ICourse,
-  ICourseDetail,
-  ICourseResponse,
-} from "@/types/course.type";
+import type { ICourseDetail, ICourseResponse } from "@/types/course.type";
 
 export type CreateCoursePayload = {
   title: string;
@@ -55,7 +51,7 @@ export const getCourseByInstructorIdApi = async ({
 export const getCourseDetailApi = async ({ id }: { id: string | number }) => {
   const res = await api.get(`courses/${id}`);
 
-  return res.data as ICourse | undefined;
+  return res.data as ICourseDetail | undefined;
 };
 
 export const getCourseDetailWithSectionsAndLessons = async (id: string) => {
