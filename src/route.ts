@@ -27,6 +27,7 @@ import AdminLessonsPage from "./pages/admin/courses/lessons";
 import AdminNewLessonPage from "./pages/admin/courses/lessons/new";
 import AdminLessonDetailPage from "./pages/admin/courses/lessons/details";
 import SectionsPage from "./pages/client/sections/details";
+import MyCoursesPage from "./pages/client/courses/my-courses";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "login", Component: LoginPage },
       { path: "register", Component: RegisterPage },
+      {
+        path: "my-courses",
+        Component: MyCoursesPage,
+      },
       {
         path: "courses",
         children: [

@@ -8,6 +8,7 @@ export const CourseCardItem = ({
   author = "Ronal Richards",
   discount = 0,
   price = 149000,
+  isBought = false,
 }: {
   id: number | string;
   title: string;
@@ -15,6 +16,7 @@ export const CourseCardItem = ({
   discount?: number;
   author: string;
   price: number;
+  isBought?: boolean;
 }) => {
   const discountPrice = price * ((100 - discount) / 100);
 
@@ -37,15 +39,21 @@ export const CourseCardItem = ({
           <span className="font-semibold">(1200 đánh giá)</span>
         </div>
         <div> 22 giờ · 155 bài · Cơ bản</div>
-        <div className="text-color-primary text-lg font-semibold">
-          {" "}
-          {discount > 0 && (
-            <span className="mr-3">{discountPrice.toLocaleString()} VND</span>
-          )}
-          <span className={`${discount > 0 ? "line-through opacity-30" : ""} `}>
-            {price.toLocaleString()} VND
-          </span>
-        </div>
+        {isBought ? (
+          <div className="btn bg-color-primary text-white">Tiếp tục học</div>
+        ) : (
+          <div className="text-color-primary text-lg font-semibold">
+            {" "}
+            {discount > 0 && (
+              <span className="mr-3">{discountPrice.toLocaleString()} VND</span>
+            )}
+            <span
+              className={`${discount > 0 ? "line-through opacity-30" : ""} `}
+            >
+              {price.toLocaleString()} VND
+            </span>
+          </div>
+        )}
       </div>
     </Link>
   );
