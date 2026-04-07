@@ -66,11 +66,17 @@ export const AdminNewResourceModal = ({ isOpen, onClose, courseId }: Props) => {
     const fileType = uploaded.type;
 
     const lessonIds = [...selectedLessonIds];
-    console.log("lessonIds", lessonIds);
 
     createResource(
       { courseId, title, fileUrl, fileType, lessonIds },
-      { onSuccess: onClose },
+      {
+        onSuccess: () => {
+          setTitle("");
+          setSelectedLessonIds(new Set());
+          uppy.cancelAll();
+          onClose();
+        },
+      },
     );
   };
 
@@ -104,7 +110,7 @@ export const AdminNewResourceModal = ({ isOpen, onClose, courseId }: Props) => {
           setValue={setTitle}
         />
 
-        <div className="dropdown w-full">
+        <div className="dropdown z-99 w-full">
           <div
             tabIndex={0}
             role="button"
@@ -115,7 +121,7 @@ export const AdminNewResourceModal = ({ isOpen, onClose, courseId }: Props) => {
           </div>
           <div
             tabIndex={0}
-            className="dropdown-content bg-base-100 rounded-box border-border z-50 max-h-80 w-full overflow-y-auto border shadow"
+            className="dropdown-content bg-base-100 rounded-box border-border max-h-80 w-full overflow-y-auto border shadow"
           >
             <div className="p-2">
               {(currentCourse?.sections ?? []).map((section) => (
@@ -185,7 +191,7 @@ export const AdminNewResourceModal = ({ isOpen, onClose, courseId }: Props) => {
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="relative z-30 mb-6">
           <h2 className="text-text-secondary mb-2 text-sm">
             File tài liệu <span className="text-error">*</span>
           </h2>

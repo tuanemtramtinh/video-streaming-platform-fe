@@ -45,8 +45,11 @@ export const LessonAdminGeneralInformation = ({
   const [desc, setDesc] = useState("");
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const isOpenDashboard = !isEdit || (isEdit && data && !data.contentUrl);
+  const isOpenDashboard =
+    courseType !== LessonType.DOCUMENT &&
+    (!isEdit || (isEdit && data && !data.contentUrl));
 
   const handleCreate = async () => {
     if (title === "" || desc === "" || orderIndex === "") {
@@ -54,21 +57,26 @@ export const LessonAdminGeneralInformation = ({
       return;
     }
 
-    const result = await uppy.upload();
+    let contentUrl = "";
+    if (isOpenDashboard) {
+      setIsUploading(true);
+      const result = await uppy.upload();
+      setIsUploading(false);
 
-    if (
-      !result ||
-      !result.failed ||
-      !result.successful ||
-      result.failed.length > 0 ||
-      result.successful.length === 0
-    ) {
-      const errorMessage = result?.failed?.[0]?.error ?? "Tải video thất bại";
-      toast.error(errorMessage);
-      return;
+      if (
+        !result ||
+        !result.failed ||
+        !result.successful ||
+        result.failed.length > 0 ||
+        result.successful.length === 0
+      ) {
+        const errorMessage = result?.failed?.[0]?.error ?? "Tải video thất bại";
+        toast.error(errorMessage);
+        return;
+      }
+
+      contentUrl = result.successful[0].uploadURL ?? "";
     }
-
-    const contentUrl = result.successful[0].uploadURL ?? "";
 
     createLesson(
       {
@@ -81,7 +89,9 @@ export const LessonAdminGeneralInformation = ({
       },
       {
         onSuccess: (data) => {
-          processVideo({ lessonId: data.id });
+          if (contentUrl) {
+            processVideo({ lessonId: data.id });
+          }
           navigate(`/admin/courses/${id}/sections/${sectionId}/lessons`);
         },
       },
@@ -111,7 +121,9 @@ export const LessonAdminGeneralInformation = ({
 
     let contentUrl = undefined;
     if (isOpenDashboard) {
+      setIsUploading(true);
       const result = await uppy.upload();
+      setIsUploading(false);
 
       if (
         !result ||
@@ -130,16 +142,25 @@ export const LessonAdminGeneralInformation = ({
 
     updatedData.contentUrl = contentUrl;
 
-    updateLesson({
-      lessonId: lessonId as string,
-      title: updatedData.title,
-      orderIndex: updatedData.orderIndex
-        ? Number(updatedData.orderIndex)
-        : undefined,
-      lessonType: updatedData.lessonType,
-      contentText: updatedData.contentText,
-      contentUrl: updatedData.contentUrl,
-    });
+    updateLesson(
+      {
+        lessonId: lessonId as string,
+        title: updatedData.title,
+        orderIndex: updatedData.orderIndex
+          ? Number(updatedData.orderIndex)
+          : undefined,
+        lessonType: updatedData.lessonType,
+        contentText: updatedData.contentText,
+        contentUrl: updatedData.contentUrl,
+      },
+      {
+        onSuccess: () => {
+          if (contentUrl) {
+            processVideo({ lessonId: lessonId as string });
+          }
+        },
+      },
+    );
   };
 
   const handleDelete = () => {
@@ -159,7 +180,9 @@ export const LessonAdminGeneralInformation = ({
 
   return (
     <div>
-      {(isPending || isPendingUpdate || isLoadingDelete) && <Loading />}
+      {(isPending || isPendingUpdate || isLoadingDelete || isUploading) && (
+        <Loading />
+      )}
       {isEdit && lessonId && (
         <AdminDeleteLessonModal
           id={lessonId}
@@ -231,9 +254,11 @@ export const LessonAdminGeneralInformation = ({
           required={true}
         />
         <div className="">
-          <h2 className="text-text-secondary mb-2 text-sm">
-            Tải video bài học <span className="text-error">*</span>
-          </h2>
+          {isOpenDashboard && (
+            <h2 className="text-text-secondary mb-2 text-sm">
+              Tải video bài học <span className="text-error">*</span>
+            </h2>
+          )}
 
           <div className="min-w-0">
             {isOpenDashboard ? (
@@ -255,7 +280,6 @@ export const LessonAdminGeneralInformation = ({
               </div>
             )}
           </div>
-          {/* Cột "Xem trước" (video player) tạm tắt — bật lại cùng state videoPlaybackUrl + grid 2 cột */}
         </div>
         <div>
           <h2 className="text-text-secondary mb-2 text-sm">
@@ -268,7 +292,6 @@ export const LessonAdminGeneralInformation = ({
             disabled={isPending || isPendingUpdate}
             init={{
               plugins: ["lists", "link", "image", "table", "code"],
-
               toolbar:
                 "undo redo | blocks | bold italic | bullist numlist | alignleft aligncenter alignright | indent outdent | code",
             }}

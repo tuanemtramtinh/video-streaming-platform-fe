@@ -44,7 +44,7 @@ const SectionItem = ({ section }: { section: ISection }) => {
             {section.title}
           </h3>
           <div className="text-text-secondary text-sm font-normal">
-            <span className="mr-4">5 Bài học</span>
+            <span className="mr-4">{section.lessons.length} Bài học</span>
             <span>1 Giờ</span>
           </div>
         </div>

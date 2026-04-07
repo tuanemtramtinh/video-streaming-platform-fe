@@ -8,7 +8,7 @@ export const useProcessVideo = () => {
   return useMutation({
     mutationFn: processVideo,
     onSuccess: () => {
-      toast.success("Video is being processed. Please comeback later");
+      toast.success("Video đang được xử lý. Vui lòng quay lại sau");
     },
     onError: (error: AxiosError) => {
       const errorBody = error.response?.data as IAxiosErrorBody;
