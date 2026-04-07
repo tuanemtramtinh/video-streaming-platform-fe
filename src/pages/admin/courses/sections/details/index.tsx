@@ -1,7 +1,6 @@
 import { AdminCustomInput } from "@/components/AdminCustomInput";
 import { AdminDeleteSectionModal } from "@/components/AdminDeleteSectionModal";
 import Loading from "@/components/Loading";
-import { useGetSectionById } from "@/hooks/useGetSectionById";
 import { useUpdateSection } from "@/hooks/useUpdateSection";
 import { useSectionStore } from "@/stores/useSectionStore";
 import type { ISection } from "@/types/section.type";
@@ -12,7 +11,7 @@ export default function AdminCourseSectionDetailsPage() {
   const { sectionId } = useParams();
   const { mutate: updateSection } = useUpdateSection();
 
-  const setSection = useSectionStore((state) => state.setSection);
+  const section = useSectionStore((state) => state.section);
 
   const [initialData, setInitialData] = useState<ISection | null>(null);
   const [orderIndex, setOrderIndex] = useState("0");
@@ -20,7 +19,7 @@ export default function AdminCourseSectionDetailsPage() {
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const { data, isSuccess } = useGetSectionById(sectionId as string);
+  // const { data, isSuccess } = useGetSectionById(sectionId as string);
 
   const handleUpdate = () => {
     if (!initialData) return;
@@ -43,14 +42,13 @@ export default function AdminCourseSectionDetailsPage() {
   };
 
   useEffect(() => {
-    if (data && isSuccess) {
+    if (section) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setOrderIndex(String(data.orderIndex));
-      setTitle(data.title);
-      setInitialData(data);
-      setSection(data);
+      setOrderIndex(String(section.orderIndex));
+      setTitle(section.title);
+      setInitialData(section);
     }
-  }, [isSuccess, data, setSection]);
+  }, [section]);
 
   return (
     <div>

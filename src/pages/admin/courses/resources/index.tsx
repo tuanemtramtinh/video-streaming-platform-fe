@@ -29,14 +29,14 @@ const columns: ColumnDef<IResource>[] = [
     header: "Hành động",
     cell: ({ row }) => (
       <div onClick={(e) => e.stopPropagation()}>
-        <a
+        {/* <a
           href={row.original.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-info btn-sm mr-3 text-white"
         >
           Xem trước
-        </a>
+        </a> */}
         <a
           href={row.original.fileUrl}
           download

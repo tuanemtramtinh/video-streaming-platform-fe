@@ -6,11 +6,12 @@ interface SectionState {
   section: ISection | null;
 
   setSection: (section: ISection) => void;
+  clearSection: () => void;
 }
 
-export const useSectionStore = create<SectionState>((set, get) => ({
+export const useSectionStore = create<SectionState>((set) => ({
   sections: [],
   section: null,
-
   setSection: (section) => set({ section }),
+  clearSection: () => set({ section: null }),
 }));

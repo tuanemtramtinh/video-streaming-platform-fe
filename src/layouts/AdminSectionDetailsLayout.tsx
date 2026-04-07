@@ -1,11 +1,26 @@
+import { useGetSectionById } from "@/hooks/useGetSectionById";
 import { useSectionStore } from "@/stores/useSectionStore";
 import { ChevronLeft } from "lucide-react";
+import { useEffect } from "react";
 import { Link, NavLink, Outlet, useParams } from "react-router";
 
 export default function AdminSectionDetailsLayout() {
-  const { id } = useParams();
+  const { id, sectionId } = useParams();
 
   const section = useSectionStore((state) => state.section);
+
+  const { data, isSuccess } = useGetSectionById(sectionId as string);
+
+  const setSection = useSectionStore((state) => state.setSection);
+  const clearSection = useSectionStore((state) => state.clearSection);
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setSection(data);
+    } else {
+      clearSection();
+    }
+  }, [data, isSuccess, clearSection, setSection]);
 
   return (
     <div className="flex h-full flex-col">

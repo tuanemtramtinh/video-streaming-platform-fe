@@ -127,14 +127,14 @@ export const AdminResourceDetailModal = ({
         </div>
 
         <div className="flex justify-end gap-3">
-          <a
+          {/* <a
             href={resource?.fileUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-info text-white"
           >
             Xem trước
-          </a>
+          </a> */}
           <a
             href={resource?.fileUrl}
             download
