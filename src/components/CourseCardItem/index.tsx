@@ -21,7 +21,7 @@ export const CourseCardItem = ({
   const discountPrice = price * ((100 - discount) / 100);
 
   return (
-    <Link to={`/courses/${id}`} className="card border-border border shadow-lg">
+    <Link to={`/courses/${id}`} className="card border-border border shadow-lg h-full flex flex-col">
       <figure className="px-4 pt-4">
         <div className="h-34 w-full overflow-hidden rounded-lg">
           <img
@@ -31,8 +31,8 @@ export const CourseCardItem = ({
           />
         </div>
       </figure>
-      <div className="card-body text-text-secondary p-4">
-        <h2 className="card-title text-color-primary">{title}</h2>
+      <div className="card-body text-text-secondary p-4 flex flex-col flex-1">
+        <h2 className="card-title text-color-primary line-clamp-2 min-h-[3.5rem]">{title}</h2>
         <div>{author}</div>
         <div className="flex items-center gap-2">
           <Rating rating={5} />

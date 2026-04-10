@@ -2,10 +2,14 @@ export const CourseDetailHeaderRightColumn = ({
   price,
   discount,
   thumbnailUrl,
+  onEnroll,
+  isEnrolled = false,
 }: {
   price: number;
   discount: number;
   thumbnailUrl: string;
+  onEnroll: () => void;
+  isEnrolled?: boolean;
 }) => {
   const discountPrice = price * ((100 - discount) / 100);
 
@@ -41,7 +45,13 @@ export const CourseDetailHeaderRightColumn = ({
           )}
         </div>
         <div className="card-actions mt-6">
-          <button className="btn btn-neutral btn-block">Đăng ký học</button>
+          {isEnrolled ? (
+            <div className="btn btn-success btn-block">Đã mua</div>
+          ) : (
+            <button className="btn btn-neutral btn-block" onClick={onEnroll}>
+              Đăng ký học
+            </button>
+          )}
         </div>
       </div>
     </div>

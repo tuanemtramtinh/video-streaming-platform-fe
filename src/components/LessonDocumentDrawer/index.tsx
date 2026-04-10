@@ -43,7 +43,7 @@ export function LessonDocumentDrawer() {
           </div>
           <ul className="menu w-full gap-3">
             {data?.map((resource) => (
-              <li>
+              <li key={resource.id}>
                 <div className="border-border bg-background text-color-primary flex justify-between border">
                   <div className="flex items-center gap-2">
                     <FileText />

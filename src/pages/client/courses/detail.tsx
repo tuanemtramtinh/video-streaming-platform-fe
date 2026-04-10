@@ -5,12 +5,14 @@ import { CourseDetailHeaderRightColumn } from "@/components/CourseDetailHeaderRi
 import { CourseDetailRating } from "@/components/CourseDetailRating";
 import { CourseDetailSectionList } from "@/components/CourseDetailSectionList";
 import { CourseDetailTeacher } from "@/components/CourseDetailTeacher";
+import { CourseEnrollModal } from "@/components/CourseEnrollModal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { CourseCardItem } from "@/components/CourseCardItem";
 import { useParams } from "react-router";
 import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
+import { useState } from "react";
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -27,14 +29,20 @@ export default function CourseDetailPage() {
     pauseOnFocus: true,
   };
 
-  // console.log(id);
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
   const { data } = useGetCourseDetail(id as string);
 
-  // console.log(data);
-
   return (
     <div className="relative">
+      <CourseEnrollModal
+        courseId={id as string}
+        title={data?.title ?? ""}
+        price={data?.price ?? 0}
+        discount={data?.discount ?? 0}
+        isOpen={isEnrollModalOpen}
+        onClose={() => setIsEnrollModalOpen(false)}
+      />
       <div className="bg-background py-10">
         <div className="container mx-auto flex gap-10">
           <div className="w-[65%]">
@@ -45,12 +53,14 @@ export default function CourseDetailPage() {
           </div>
           <div className="w-[35%]">
             <CourseDetailHeaderRightColumn
+              isEnrolled={data?.isEnrolled ?? false}
               price={data?.price ?? 0}
               discount={data?.discount ?? 0}
               thumbnailUrl={
                 data?.thumbnailUrl ??
                 "https://placehold.co/600x400?text=Hello+World"
               }
+              onEnroll={() => setIsEnrollModalOpen(true)}
             />
           </div>
         </div>
@@ -78,7 +88,10 @@ export default function CourseDetailPage() {
                 <div className="text-text-fourthdary text-sm">Xem tất cả</div>
               </div>
 
-              <CourseDetailSectionList sections={data?.sections ?? []} />
+              <CourseDetailSectionList
+                isEnrolled={data?.isEnrolled}
+                sections={data?.sections ?? []}
+              />
             </div>
           </div>
         </div>

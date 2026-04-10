@@ -25,6 +25,8 @@ export interface ICourse {
   category: ICategory;
   instructor: IInstructor;
 
+  isEnrolled: boolean;
+
   price: number;
   discount: number;
 

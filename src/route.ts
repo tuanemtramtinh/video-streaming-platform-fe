@@ -19,6 +19,7 @@ import AdminNewCoursePage from "./pages/admin/courses/new";
 import AdminCourseDetailsLayout from "@/layouts/AdminCourseDetailsLayout";
 import AdminEditCoursePage from "@/pages/admin/courses/details";
 import AdminResourcesPage from "@/pages/admin/courses/resources";
+import AdminCourseEnrollmentsPage from "@/pages/admin/courses/enrollments";
 
 import AdminCourseSectionPage from "@/pages/admin/courses/sections";
 import AdminCourseSectionDetailsPage from "@/pages/admin/courses/sections/details";
@@ -28,6 +29,7 @@ import AdminNewLessonPage from "./pages/admin/courses/lessons/new";
 import AdminLessonDetailPage from "./pages/admin/courses/lessons/details";
 import SectionsPage from "./pages/client/sections/details";
 import MyCoursesPage from "./pages/client/courses/my-courses";
+import PaymentReturnPage from "./pages/client/payments/return";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "my-courses",
         Component: MyCoursesPage,
+      },
+      {
+        path: "payments/return",
+        Component: PaymentReturnPage,
       },
       {
         path: "courses",
@@ -83,6 +89,7 @@ const router = createBrowserRouter([
                   { index: true, Component: AdminEditCoursePage },
                   { path: "resources", Component: AdminResourcesPage },
                   { path: "sections", Component: AdminCourseSectionPage },
+                  { path: "enrollments", Component: AdminCourseEnrollmentsPage },
                 ],
               },
 

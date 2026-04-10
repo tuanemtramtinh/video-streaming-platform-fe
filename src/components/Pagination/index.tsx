@@ -15,14 +15,13 @@ export default function Pagination({
 
   return (
     <div className="join justify-center">
-      {currentPage > 1 && (
-        <button
-          className="join-item btn btn-square"
-          onClick={() => onChange(currentPage - 1)}
-        >
-          <ChevronLeft size={20} />
-        </button>
-      )}
+      <button
+        className="join-item btn btn-square"
+        onClick={() => onChange(currentPage - 1)}
+        disabled={currentPage <= 1}
+      >
+        <ChevronLeft size={20} />
+      </button>
 
       {Array.from({ length: lastPage }, (_, i) => i + 1).map((page) => (
         <button
@@ -36,14 +35,13 @@ export default function Pagination({
         </button>
       ))}
 
-      {currentPage < lastPage && (
-        <button
-          className="join-item btn btn-square"
-          onClick={() => onChange(currentPage + 1)}
-        >
-          <ChevronRight size={20} />
-        </button>
-      )}
+      <button
+        className="join-item btn btn-square"
+        onClick={() => onChange(currentPage + 1)}
+        disabled={currentPage >= lastPage}
+      >
+        <ChevronRight size={20} />
+      </button>
     </div>
   );
 }

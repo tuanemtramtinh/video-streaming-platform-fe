@@ -52,6 +52,14 @@ export default function AdminCourseDetailsLayout() {
         >
           Tài liệu
         </NavLink>
+
+        <NavLink
+          to={"enrollments"}
+          role="tab"
+          className={({ isActive }) => `tab ${isActive ? "tab-active" : ""}`}
+        >
+          Học viên
+        </NavLink>
       </div>
 
       <Outlet />

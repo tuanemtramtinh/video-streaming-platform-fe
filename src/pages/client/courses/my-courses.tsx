@@ -1,8 +1,29 @@
 import { CourseCardItem } from "@/components/CourseCardItem";
 import { CourseLeftColumn } from "@/components/CourseLeftColumn";
+import Pagination from "@/components/Pagination";
+import { useGetEnrolledCourses } from "@/hooks/useGetEnrolledCourses";
 import { Search } from "lucide-react";
+import { useSearchParams } from "react-router";
 
 export default function MyCoursesPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageFromUrl = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 9;
+
+  const { data, isSuccess } = useGetEnrolledCourses(pageFromUrl, limit);
+
+  const handleChangePage = (page: number) => {
+    setSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+  };
+
+  const lastPage = data?.meta?.lastPage ?? 1;
+
+  console.log(lastPage);
+
   return (
     <div className="container mx-auto">
       <div className="py-10">
@@ -27,9 +48,27 @@ export default function MyCoursesPage() {
             </label>
 
             <div className="grid grid-cols-3 gap-5">
-              <CourseCardItem isBought={true} />
-              <CourseCardItem isBought={true} />
-              <CourseCardItem isBought={true} />
+              {isSuccess &&
+                data?.data.map((course) => (
+                  <CourseCardItem
+                    key={course.id}
+                    id={course.id}
+                    title={course.title}
+                    thumbnailUrl={course.thumbnailUrl}
+                    author={`${course.instructor.lastName} ${course.instructor.firstName}`}
+                    price={course.price}
+                    discount={course.discount}
+                    isBought={true}
+                  />
+                ))}
+            </div>
+
+            <div className="flex w-full justify-center">
+              <Pagination
+                currentPage={pageFromUrl}
+                lastPage={lastPage}
+                onChange={handleChangePage}
+              />
             </div>
           </div>
         </div>

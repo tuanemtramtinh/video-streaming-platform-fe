@@ -32,7 +32,13 @@ const ListItem = ({
   );
 };
 
-const SectionItem = ({ section }: { section: ISection }) => {
+const SectionItem = ({
+  isEnrolled,
+  section,
+}: {
+  isEnrolled: boolean;
+  section: ISection;
+}) => {
   const { id } = useParams();
 
   return (
@@ -51,14 +57,31 @@ const SectionItem = ({ section }: { section: ISection }) => {
       </div>
       <div className="collapse-content text-sm">
         <div className="flex flex-col gap-4">
-          {section.lessons.map((lesson) => (
-            <ListItem
-              key={lesson.id}
-              courseId={id as string}
-              sectionId={section.id}
-              lesson={lesson}
-            />
-          ))}
+          {isEnrolled &&
+            section.lessons.map((lesson) => (
+              <ListItem
+                key={lesson.id}
+                courseId={id as string}
+                sectionId={section.id}
+                lesson={lesson}
+              />
+            ))}
+
+          {!isEnrolled &&
+            section.lessons.map((lesson) => {
+              const Icon = lessonTypeIcon[lesson.lessonType];
+              return (
+                <div
+                  key={lesson.id}
+                  className="border-border flex items-center justify-between border-b py-3"
+                >
+                  <div>{lesson.title}</div>
+                  <div>
+                    <Icon />
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>
@@ -66,14 +89,20 @@ const SectionItem = ({ section }: { section: ISection }) => {
 };
 
 export const CourseDetailSectionList = ({
+  isEnrolled = false,
   sections,
 }: {
+  isEnrolled?: boolean;
   sections: ISection[];
 }) => {
   return (
     <div className="join join-vertical w-full">
       {sections.map((section) => (
-        <SectionItem key={section.id} section={section} />
+        <SectionItem
+          isEnrolled={isEnrolled}
+          key={section.id}
+          section={section}
+        />
       ))}
     </div>
   );

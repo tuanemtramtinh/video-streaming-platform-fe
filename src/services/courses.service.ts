@@ -1,5 +1,6 @@
 import api from "@/lib/axios";
 import type { ICourseDetail, ICourseResponse } from "@/types/course.type";
+import type { IEnrollmentResponse } from "@/types/enrollment.type";
 
 export type CreateCoursePayload = {
   title: string;
@@ -115,6 +116,36 @@ export const updateCourseApi = async ({
 
 export const deleteCourseApi = async ({ id }: { id: string }) => {
   return await api.delete(`/courses/${id}`);
+};
+
+export const getEnrolledCoursesApi = async ({
+  page = 1,
+  limit = 9,
+}: {
+  page: number;
+  limit: number;
+}) => {
+  const res = await api.get("/courses/me/enrolled", {
+    params: { page, limit },
+  });
+
+  return res.data as ICourseResponse | undefined;
+};
+
+export const getEnrollmentsByCourseApi = async ({
+  courseId,
+  page = 1,
+  limit = 10,
+}: {
+  courseId: string | number;
+  page: number;
+  limit: number;
+}) => {
+  const res = await api.get(`/courses/${courseId}/enrollments`, {
+    params: { page, limit },
+  });
+
+  return res.data as IEnrollmentResponse | undefined;
 };
 
 export const searchCourse = async (search: string) => {
