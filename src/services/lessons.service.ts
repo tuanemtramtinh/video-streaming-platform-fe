@@ -32,12 +32,14 @@ export const getLessons = async (
   sectionId: number,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   const res = await api.get("/lessons", {
     params: {
       sectionId,
       page,
       limit,
+      ...(keyword ? { keyword } : {}),
     },
   });
   return res.data as ILessonResponse;

@@ -5,9 +5,10 @@ export const useGetResourcesByCourseId = (
   courseId: number,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   return useQuery({
-    queryKey: ["resources", courseId, page, limit],
-    queryFn: () => getResourcesByCourseIdApi(courseId, page, limit),
+    queryKey: ["resources", courseId, page, limit, keyword],
+    queryFn: () => getResourcesByCourseIdApi(courseId, page, limit, keyword),
   });
 };

@@ -6,7 +6,7 @@ import type { IResource } from "@/types/resources.type";
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 const columns: ColumnDef<IResource>[] = [
@@ -29,14 +29,6 @@ const columns: ColumnDef<IResource>[] = [
     header: "Hành động",
     cell: ({ row }) => (
       <div onClick={(e) => e.stopPropagation()}>
-        {/* <a
-          href={row.original.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-info btn-sm mr-3 text-white"
-        >
-          Xem trước
-        </a> */}
         <a
           href={row.original.fileUrl}
           download
@@ -61,11 +53,23 @@ export default function AdminResourcesPage() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [keyword, setKeyword] = useState<string | undefined>(undefined);
+
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const page = pagination.pageIndex + 1;
   const limit = pagination.pageSize;
 
-  const { data } = useGetResourcesByCourseId(courseId, page, limit);
+  const { data } = useGetResourcesByCourseId(courseId, page, limit, keyword);
+
+  const handleSearch = useCallback((value: string) => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      const trimmed = value.trim();
+      setKeyword(trimmed || undefined);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    }, 500);
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -88,9 +92,15 @@ export default function AdminResourcesPage() {
           Tạo tài liệu mới
         </button>
       </div>
+
       <label className="input mb-6 w-full rounded-lg">
         <Search />
-        <input type="search" className="grow" placeholder="Search" />
+        <input
+          type="search"
+          className="grow"
+          placeholder="Tìm kiếm tài liệu..."
+          onChange={(e) => handleSearch(e.target.value)}
+        />
       </label>
       <DataTable
         columns={columns}

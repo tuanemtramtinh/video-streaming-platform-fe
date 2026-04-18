@@ -9,9 +9,10 @@ export const getResourcesByCourseIdApi = async (
   courseId: number,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   const res = await api.get(`/resources/courses/${courseId}`, {
-    params: { page, limit },
+    params: { page, limit, ...(keyword ? { keyword } : {}) },
   });
   return res.data as IResourceResponse;
 };

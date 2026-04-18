@@ -5,9 +5,10 @@ export const useGetSectionsByCourseId = (
   courseId: number,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   return useQuery({
-    queryKey: ["sections", courseId, page, limit],
-    queryFn: () => getSectionsByCourseIdApi(courseId, page, limit),
+    queryKey: ["sections", courseId, page, limit, keyword],
+    queryFn: () => getSectionsByCourseIdApi(courseId, page, limit, keyword),
   });
 };

@@ -3,6 +3,7 @@ import { AdminCourseCardSkeleton } from "@/components/Skeletons/AdminCourseCardS
 import { useGetCourseByInstructor } from "@/hooks/useGetCourseByInstructor";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Search } from "lucide-react";
+import { useCallback, useRef } from "react";
 import { Link, useSearchParams } from "react-router";
 
 const CardItem = ({ title, desc }: { title: string; desc: string }) => {
@@ -54,23 +55,43 @@ const Card = ({
 export default function AdminCoursePage() {
   const user = useAuthStore((state) => state.user);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [keywordParams, setSearchParams] = useSearchParams();
 
-  const pageFromUrl = Number(searchParams.get("page")) || 1;
-  const limit = Number(searchParams.get("limit")) || 9;
+  const pageFromUrl = Number(keywordParams.get("page")) || 1;
+  const limit = Number(keywordParams.get("limit")) || 9;
+  const keywordFromUrl = keywordParams.get("keyword") ?? undefined;
+
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data, isPending } = useGetCourseByInstructor(
     user?.id as string,
     pageFromUrl,
     limit,
+    keywordFromUrl,
   );
 
   const handleChangePage = (page: number) => {
     setSearchParams({
       page: page.toString(),
       limit: limit.toString(),
+      ...(keywordFromUrl ? { keyword: keywordFromUrl } : {}),
     });
   };
+
+  const handleSearch = useCallback(
+    (value: string) => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => {
+        const trimmed = value.trim();
+        setSearchParams({
+          page: "1",
+          limit: limit.toString(),
+          ...(trimmed ? { keyword: trimmed } : {}),
+        });
+      }, 500);
+    },
+    [limit, setSearchParams],
+  );
 
   const lastPage = data?.meta?.lastPage ?? 1;
 
@@ -87,7 +108,13 @@ export default function AdminCoursePage() {
       </div>
       <label className="input mb-6 w-full rounded-lg">
         <Search />
-        <input type="search" className="grow" placeholder="Search" />
+        <input
+          type="search"
+          className="grow"
+          placeholder="Tìm kiếm khoá học..."
+          defaultValue={keywordFromUrl ?? ""}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
       </label>
       <div className="flex flex-1 flex-col gap-6">
         <div className="grid flex-1 grid-cols-3 content-start gap-3">

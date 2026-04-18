@@ -8,8 +8,8 @@ import { CourseDetailTeacher } from "@/components/CourseDetailTeacher";
 import { CourseEnrollModal } from "@/components/CourseEnrollModal";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
-import { CourseCardItem } from "@/components/CourseCardItem";
+// import Slider from "react-slick";
+// import { CourseCardItem } from "@/components/CourseCardItem";
 import { useParams } from "react-router";
 import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
 import { useState } from "react";
@@ -17,17 +17,17 @@ import { useState } from "react";
 export default function CourseDetailPage() {
   const { id } = useParams();
 
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
-    pauseOnFocus: true,
-  };
+  // const settings = {
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 3,
+  //   slidesToScroll: 1,
+  //   arrows: true,
+  //   autoplay: true,
+  //   autoplaySpeed: 3000,
+  //   pauseOnHover: true,
+  //   pauseOnFocus: true,
+  // };
 
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
@@ -114,7 +114,7 @@ export default function CourseDetailPage() {
           </div>
         </div>
 
-        <div className="">
+        {/* <div className="">
           <h2 className="text-color-primary mb-6 text-xl font-semibold">
             Các khoá học tương tự khác
           </h2>
@@ -127,7 +127,7 @@ export default function CourseDetailPage() {
               ))}
             </Slider>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

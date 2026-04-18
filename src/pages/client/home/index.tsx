@@ -2,7 +2,7 @@ import HomePageImage from "@/assets/homepage.png";
 import HomePageImage1 from "@/assets/homepage-1.png";
 import HomePageImage2 from "@/assets/homepage-2.png";
 import { CategoryCardItem } from "@/components/CategoryCardItem";
-import { CourseCardItem } from "@/components/CourseCardItem";
+// import { CourseCardItem } from "@/components/CourseCardItem";
 import { Atom, Briefcase, CodeXml, MoveRight, Telescope } from "lucide-react";
 import { TeacherCardItem } from "@/components/TeacherCardItem";
 
@@ -64,7 +64,7 @@ function HomePage() {
           />
         </div>
       </div>
-      {/* Section3 */}
+      {/* Section3
       <div className="pb-15">
         <div className="flex items-center justify-between">
           <h2 className="text-color-primary mb-6 text-2xl font-semibold">
@@ -79,7 +79,7 @@ function HomePage() {
           <CourseCardItem />
           <CourseCardItem />
         </div>
-      </div>
+      </div> */}
       {/* Section4 */}
       <div className="pb-15">
         <div className="flex items-center justify-between">

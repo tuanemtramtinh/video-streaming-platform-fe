@@ -5,9 +5,10 @@ export const useGetLessons = (
   sectionId: number,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   return useQuery({
-    queryKey: ["lessons", sectionId, page, limit],
-    queryFn: () => getLessons(sectionId, page, limit),
+    queryKey: ["lessons", sectionId, page, limit, keyword],
+    queryFn: () => getLessons(sectionId, page, limit, keyword),
   });
 };

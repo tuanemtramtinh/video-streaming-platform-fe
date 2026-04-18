@@ -9,11 +9,13 @@ export const getSectionsByCourseIdApi = async (
   courseId: number,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   const res = await api.get(`/sections/course/${courseId}`, {
     params: {
       page,
       limit,
+      ...(keyword ? { keyword } : {}),
     },
   });
 

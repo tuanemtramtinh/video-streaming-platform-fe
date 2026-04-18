@@ -34,15 +34,18 @@ export const getCourseByInstructorIdApi = async ({
   instructorId,
   page = 1,
   limit = 9,
+  keyword,
 }: {
   instructorId: string;
   page: number;
   limit: number;
+  keyword?: string;
 }) => {
   const res = await api.get(`courses/instructor/${instructorId}`, {
     params: {
       page,
       limit,
+      ...(keyword ? { keyword } : {}),
     },
   });
 

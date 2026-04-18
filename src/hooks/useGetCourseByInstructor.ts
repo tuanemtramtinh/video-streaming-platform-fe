@@ -5,11 +5,12 @@ export const useGetCourseByInstructor = (
   id: string,
   page: number,
   limit: number,
+  keyword?: string,
 ) => {
   return useQuery({
-    queryKey: ["courses", id, page, limit],
+    queryKey: ["courses", id, page, limit, keyword],
     queryFn: () =>
-      getCourseByInstructorIdApi({ instructorId: id, page, limit }),
+      getCourseByInstructorIdApi({ instructorId: id, page, limit, keyword }),
     placeholderData: keepPreviousData,
   });
 };
