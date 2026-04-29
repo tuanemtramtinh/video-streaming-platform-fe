@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { ICourseDetail, ICourseResponse } from "@/types/course.type";
+import type { ICourseDetail, ICourseResponse, IWishlistResponse } from "@/types/course.type";
 import type { IEnrollmentResponse } from "@/types/enrollment.type";
 
 export type CreateCoursePayload = {
@@ -159,4 +159,35 @@ export const searchCourse = async (search: string) => {
       },
     })
   ).data as ICourseResponse;
+};
+
+export const getUserWishlistApi = async ({
+  page = 1,
+  limit = 9,
+}: {
+  page: number;
+  limit: number;
+}) => {
+  const res = await api.get("/courses/me/wishlist", {
+    params: { page, limit },
+  });
+  return res.data as IWishlistResponse | undefined;
+};
+
+export const addToWishlistApi = async ({
+  courseId,
+}: {
+  courseId: number;
+}) => {
+  const res = await api.post(`/courses/${courseId}/wishlist`);
+  return res.data;
+};
+
+export const removeFromWishlistApi = async ({
+  courseId,
+}: {
+  courseId: number;
+}) => {
+  const res = await api.delete(`/courses/${courseId}/wishlist`);
+  return res.data;
 };

@@ -1,4 +1,4 @@
-import { Bell, Book, Gauge, LogOut, Search, ShoppingCart } from "lucide-react";
+import { Bell, Book, Gauge, Heart, LogOut, Search, ShoppingCart, UserPen } from "lucide-react";
 import { Link } from "react-router";
 import webLogo from "../../assets/logo.svg";
 import { Avatar } from "@/components/Avatar";
@@ -145,6 +145,12 @@ export const ClientHeader = () => {
                 className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
               >
                 <li>
+                  <Link to={"/profile"} className="inline-flex items-center">
+                    <UserPen />
+                    <span>Hồ sơ của tôi</span>
+                  </Link>
+                </li>
+                <li>
                   <Link to={"/admin"} className="inline-flex items-center">
                     <Gauge />
                     <span>Trang Quản Lý</span>
@@ -154,6 +160,12 @@ export const ClientHeader = () => {
                   <Link to={"/my-courses"} className="inline-flex items-center">
                     <Book />
                     <span>Khoá học của tôi</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"/wishlist"} className="inline-flex items-center">
+                    <Heart />
+                    <span>Danh sách yêu thích</span>
                   </Link>
                 </li>
               </ul>

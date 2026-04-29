@@ -44,3 +44,15 @@ export interface ICourseResponse {
   data: ICourse[];
   meta: IPagination;
 }
+
+export interface IWishlistItem {
+  userId: number;
+  courseId: number;
+  createdAt: string;
+  course: ICourse;
+}
+
+export interface IWishlistResponse {
+  data: IWishlistItem[];
+  meta: IPagination;
+}

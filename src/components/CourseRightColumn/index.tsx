@@ -3,9 +3,11 @@ import { CourseCardItem } from "../CourseCardItem";
 import { useSearchParams } from "react-router";
 import Pagination from "@/components/Pagination";
 import { CourseCardItemSkeleton } from "@/components/Skeletons/CourseCardItemSkeleton";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export const CourseRightColumn = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuthStore();
 
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 9;
@@ -38,6 +40,9 @@ export const CourseRightColumn = () => {
               price={course.price}
               discount={course.discount}
               thumbnailUrl={course.thumbnailUrl}
+              isBought={
+                course.isEnrolled || course.instructorId === Number(user?.id)
+              }
             />
           ))
         ) : (

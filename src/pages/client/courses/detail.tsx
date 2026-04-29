@@ -12,6 +12,10 @@ import "slick-carousel/slick/slick-theme.css";
 // import { CourseCardItem } from "@/components/CourseCardItem";
 import { useParams } from "react-router";
 import { useGetCourseDetail } from "@/hooks/useGetCourseDetail";
+import { useAddToWishlist } from "@/hooks/useAddToWishlist";
+import { useRemoveFromWishlist } from "@/hooks/useRemoveFromWishlist";
+import { useGetWishlist } from "@/hooks/useGetWishlist";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useState } from "react";
 
 export default function CourseDetailPage() {
@@ -32,6 +36,13 @@ export default function CourseDetailPage() {
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
   const { data } = useGetCourseDetail(id as string);
+  const { mutate: addToWishlist } = useAddToWishlist();
+  const { mutate: removeFromWishlist } = useRemoveFromWishlist();
+
+  const user = useAuthStore((state) => state.user);
+  const { data: wishlistData } = useGetWishlist(1, 100, !!user);
+  const isWishlisted =
+    wishlistData?.data?.some((item) => item.courseId === Number(id)) ?? false;
 
   return (
     <div className="relative">
@@ -54,6 +65,7 @@ export default function CourseDetailPage() {
           <div className="w-[35%]">
             <CourseDetailHeaderRightColumn
               isEnrolled={data?.isEnrolled ?? false}
+              isWishlisted={isWishlisted}
               price={data?.price ?? 0}
               discount={data?.discount ?? 0}
               thumbnailUrl={
@@ -61,6 +73,8 @@ export default function CourseDetailPage() {
                 "https://placehold.co/600x400?text=Hello+World"
               }
               onEnroll={() => setIsEnrollModalOpen(true)}
+              onAddToWishlist={() => addToWishlist({ courseId: Number(id) })}
+              onRemoveFromWishlist={() => removeFromWishlist({ courseId: Number(id) })}
             />
           </div>
         </div>

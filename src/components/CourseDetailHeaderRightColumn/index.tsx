@@ -1,15 +1,23 @@
+import { Heart } from "lucide-react";
+
 export const CourseDetailHeaderRightColumn = ({
   price,
   discount,
   thumbnailUrl,
   onEnroll,
+  onAddToWishlist,
+  onRemoveFromWishlist,
   isEnrolled = false,
+  isWishlisted = false,
 }: {
   price: number;
   discount: number;
   thumbnailUrl: string;
   onEnroll: () => void;
+  onAddToWishlist?: () => void;
+  onRemoveFromWishlist?: () => void;
   isEnrolled?: boolean;
+  isWishlisted?: boolean;
 }) => {
   const discountPrice = price * ((100 - discount) / 100);
 
@@ -44,13 +52,32 @@ export const CourseDetailHeaderRightColumn = ({
             </span>
           )}
         </div>
-        <div className="card-actions mt-6">
+        <div className="card-actions mt-6 flex-col gap-2">
           {isEnrolled ? (
             <div className="btn btn-success btn-block">Đã mua</div>
           ) : (
-            <button className="btn btn-neutral btn-block" onClick={onEnroll}>
-              Đăng ký học
-            </button>
+            <>
+              <button className="btn btn-neutral btn-block" onClick={onEnroll}>
+                Đăng ký học
+              </button>
+              {isWishlisted ? (
+                <button
+                  className="btn btn-outline btn-error btn-block gap-2"
+                  onClick={onRemoveFromWishlist}
+                >
+                  <Heart className="h-4 w-4" fill="currentColor" />
+                  Đã yêu thích
+                </button>
+              ) : (
+                <button
+                  className="btn btn-outline btn-block gap-2"
+                  onClick={onAddToWishlist}
+                >
+                  <Heart className="h-4 w-4" />
+                  Thêm vào yêu thích
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>

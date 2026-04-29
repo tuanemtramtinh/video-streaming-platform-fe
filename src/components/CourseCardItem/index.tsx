@@ -1,3 +1,4 @@
+import { Heart } from "lucide-react";
 import { Link } from "react-router";
 import { Rating } from "../Rating";
 
@@ -9,6 +10,7 @@ export const CourseCardItem = ({
   discount = 0,
   price = 149000,
   isBought = false,
+  onRemoveFromWishlist,
 }: {
   id: number | string;
   title: string;
@@ -17,11 +19,22 @@ export const CourseCardItem = ({
   author: string;
   price: number;
   isBought?: boolean;
+  onRemoveFromWishlist?: () => void;
 }) => {
   const discountPrice = price * ((100 - discount) / 100);
 
   return (
-    <Link to={`/courses/${id}`} className="card border-border border shadow-lg h-full flex flex-col">
+    <div className="relative h-full">
+      {onRemoveFromWishlist && (
+        <button
+          onClick={onRemoveFromWishlist}
+          className="absolute top-2 right-2 z-10 btn btn-circle btn-sm bg-error text-white border-none hover:bg-error/80"
+          title="Xoá khỏi yêu thích"
+        >
+          <Heart className="h-4 w-4" fill="currentColor" />
+        </button>
+      )}
+      <Link to={`/courses/${id}`} className="card border-border border shadow-lg h-full flex flex-col">
       <figure className="px-4 pt-4">
         <div className="h-34 w-full overflow-hidden rounded-lg">
           <img
@@ -55,6 +68,7 @@ export const CourseCardItem = ({
           </div>
         )}
       </div>
-    </Link>
+      </Link>
+    </div>
   );
 };

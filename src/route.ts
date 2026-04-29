@@ -29,6 +29,8 @@ import AdminNewLessonPage from "./pages/admin/courses/lessons/new";
 import AdminLessonDetailPage from "./pages/admin/courses/lessons/details";
 import SectionsPage from "./pages/client/sections/details";
 import MyCoursesPage from "./pages/client/courses/my-courses";
+import WishlistPage from "./pages/client/courses/wishlist";
+import ProfilePage from "./pages/client/profile";
 import PaymentReturnPage from "./pages/client/payments/return";
 
 const router = createBrowserRouter([
@@ -42,6 +44,14 @@ const router = createBrowserRouter([
       {
         path: "my-courses",
         Component: MyCoursesPage,
+      },
+      {
+        path: "wishlist",
+        Component: WishlistPage,
+      },
+      {
+        path: "profile",
+        Component: ProfilePage,
       },
       {
         path: "payments/return",
